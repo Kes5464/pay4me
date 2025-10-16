@@ -1,23 +1,27 @@
-# UtilityHub - Multipage Utility Site
+# 🚀 UtilityHub - Complete Utility Services Platform
 
-A responsive web application for recharging airtime, buying data bundles, and sports betting simulation for Nigerian networks (MTN, Airtel, Glo) with Sportybet integration.
+A responsive, feature-rich utility services platform for airtime recharge, data purchase, and sports betting with integrated API services and real-time features.
 
-## Features
+## ✨ Live Demo
+
+🌐 **[Visit UtilityHub Live](https://yourusername.github.io/utility-hub)**
+
+## 🏠 Core Features
 
 ### 📞 Airtime Recharge
 - Support for MTN, Airtel, and Glo networks
 - Auto-network detection based on phone number
 - Quick amount selection (₦100, ₦200, ₦500, ₦1000, ₦2000, ₦5000)
 - Custom amount input (₦50 - ₦10,000)
-- Transaction history tracking
-- Form validation and error handling
+- Enhanced transaction receipts with QR codes
+- Real-time validation and error handling
 
 ### 📶 Data Bundle Purchase
 - Network-specific data plans with competitive pricing
 - Visual plan comparison across all networks
 - Dynamic plan loading based on selected network
 - Validity period information
-- Data usage tips and best practices
+- Enhanced transaction processing
 
 ### ⚽ Sportybet Integration
 - Sports betting simulation interface
@@ -36,6 +40,27 @@ A responsive web application for recharging airtime, buying data bundles, and sp
 - Password recovery functionality
 - Session management with "Remember me" option
 - User profile and transaction history access
+
+## 🔗 API Integrations
+
+### 🌐 Live External APIs (7+ Services)
+- **Weather Data**: Live weather updates via wttr.in
+- **Cryptocurrency Prices**: Bitcoin & Ethereum tracking (CoinGecko)
+- **Exchange Rates**: Real-time currency conversion (ExchangeRate-API)
+- **Phone Validation**: Number verification (AbstractAPI)
+- **QR Code Generation**: Dynamic QR code creation (QR Server API)
+- **Bank Information**: Nigerian bank codes lookup (Paystack Bank API)
+- **Location Services**: IP-based geolocation (ipapi.co)
+- **Time Zones**: Global timezone data (WorldTimeAPI)
+
+## 🛠️ Utility Widget
+
+### ⚡ Floating Utility Center
+- **Live Service Status**: Real-time API monitoring
+- **Weather Display**: Location-based weather info
+- **Crypto Tracker**: Live Bitcoin/Ethereum prices
+- **Quick Tools**: QR generator, bank lookup, timezone converter
+- **Transaction Verification**: Enhanced receipt system with QR codes
 
 ## Technical Features
 
