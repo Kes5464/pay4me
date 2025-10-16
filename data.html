@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Bundles - UtilityHub</title>
+    <meta name="description" content="Buy affordable data plans for MTN, Airtel, and Glo networks. Choose from daily, weekly, and monthly packages!">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📶</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">📱 UtilityHub</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="airtime.html">Airtime</a></li>
+                    <li><a href="data.html" class="active">Data</a></li>
+                    <li><a href="sportybet.html">Sportybet</a></li>
+                    <li><a href="login.html" id="authLink">Login</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page Header -->
+        <section class="hero">
+            <div class="container">
+                <h1>📶 Data Bundles</h1>
+                <p>Buy affordable data plans for all networks. Choose the perfect package for your needs!</p>
+            </div>
+        </section>
+
+        <!-- Data Purchase Form -->
+        <section class="container">
+            <div class="form-container">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Buy Data Bundle</h2>
+                
+                <form id="dataForm">
+                    <!-- Network Selection -->
+                    <div class="form-group">
+                        <label>Select Network</label>
+                        <div class="network-selection">
+                            <div class="network-option" data-network="mtn">
+                                <div class="network-logo mtn-logo"></div>
+                                <span>MTN</span>
+                            </div>
+                            <div class="network-option" data-network="airtel">
+                                <div class="network-logo airtel-logo"></div>
+                                <span>Airtel</span>
+                            </div>
+                            <div class="network-option" data-network="glo">
+                                <div class="network-logo glo-logo"></div>
+                                <span>Glo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="dataPhoneNumber">Phone Number</label>
+                        <input type="tel" id="dataPhoneNumber" name="dataPhoneNumber" placeholder="08012345678" required>
+                        <small style="color: #666; font-size: 0.9rem;">Enter the phone number to receive data</small>
+                    </div>
+
+                    <!-- Data Plans -->
+                    <div class="form-group">
+                        <label>Choose Data Plan</label>
+                        <div id="dataPlans" class="data-plans">
+                            <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #666;">
+                                Select a network to see available data plans
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">
+                        Buy Data Bundle
+                    </button>
+                </form>
+            </div>
+
+            <!-- Data Plans Comparison -->
+            <div style="margin: 3rem 0;">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Compare Data Plans</h2>
+                
+                <!-- MTN Plans -->
+                <div class="form-container" style="margin-bottom: 2rem;">
+                    <h3 style="color: #ffcc00; margin-bottom: 1.5rem;">🟡 MTN Data Plans</h3>
+                    <div class="data-plans">
+                        <div class="data-plan">
+                            <h4>350MB</h4>
+                            <p class="price">₦100</p>
+                            <p class="validity">Valid for 1 day</p>
+                            <small>Night plan: 12AM - 5AM</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>1GB</h4>
+                            <p class="price">₦500</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Most popular choice</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>2GB</h4>
+                            <p class="price">₦1000</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Best value for money</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>5GB</h4>
+                            <p class="price">₦2000</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>For heavy users</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>10GB</h4>
+                            <p class="price">₦3500</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Premium package</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>20GB</h4>
+                            <p class="price">₦6000</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Ultimate package</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Airtel Plans -->
+                <div class="form-container" style="margin-bottom: 2rem;">
+                    <h3 style="color: #ff0000; margin-bottom: 1.5rem;">🔴 Airtel Data Plans</h3>
+                    <div class="data-plans">
+                        <div class="data-plan">
+                            <h4>300MB</h4>
+                            <p class="price">₦100</p>
+                            <p class="validity">Valid for 3 days</p>
+                            <small>SmartConnect bonus</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>1GB</h4>
+                            <p class="price">₦450</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Great starter pack</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>2GB</h4>
+                            <p class="price">₦900</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Perfect for streaming</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>5GB</h4>
+                            <p class="price">₦1800</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Recommended choice</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>10GB</h4>
+                            <p class="price">₦3200</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Power user pack</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>15GB</h4>
+                            <p class="price">₦5000</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Business package</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glo Plans -->
+                <div class="form-container">
+                    <h3 style="color: #00cc44; margin-bottom: 1.5rem;">🟢 Glo Data Plans</h3>
+                    <div class="data-plans">
+                        <div class="data-plan">
+                            <h4>200MB</h4>
+                            <p class="price">₦50</p>
+                            <p class="validity">Valid for 1 day</p>
+                            <small>Campus special</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>1GB</h4>
+                            <p class="price">₦400</p>
+                            <p class="validity">Valid for 14 days</p>
+                            <small>Cheapest 1GB plan</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>2.5GB</h4>
+                            <p class="price">₦800</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Glo exclusive offer</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>5GB</h4>
+                            <p class="price">₦1600</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Data-rich bundle</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>10GB</h4>
+                            <p class="price">₦3000</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Unlimited streaming</small>
+                        </div>
+                        <div class="data-plan">
+                            <h4>18GB</h4>
+                            <p class="price">₦4500</p>
+                            <p class="validity">Valid for 30 days</p>
+                            <small>Grandmaster pack</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Usage Tips -->
+            <div class="services" style="margin: 3rem 0;">
+                <div class="service-card">
+                    <div class="service-icon">💡</div>
+                    <h3>Data Saving Tips</h3>
+                    <ul style="text-align: left;">
+                        <li>Use WiFi when available</li>
+                        <li>Disable auto-updates on mobile data</li>
+                        <li>Compress images before sharing</li>
+                        <li>Use data-saving modes in apps</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3>Monitor Usage</h3>
+                    <ul style="text-align: left;">
+                        <li>Check data balance regularly</li>
+                        <li>Set up usage alerts</li>
+                        <li>Track app data consumption</li>
+                        <li>Use built-in data monitors</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🚀</div>
+                    <h3>Best Practices</h3>
+                    <ul style="text-align: left;">
+                        <li>Buy plans based on your usage</li>
+                        <li>Consider validity periods</li>
+                        <li>Look for bonus data offers</li>
+                        <li>Subscribe before expiration</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear">2024</span> UtilityHub. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                Affordable Data 💰 Instant Activation ⚡ All Networks 📶
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/api-service.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/realtime-features.js"></script>
+    <script src="js/utility-widget.js"></script>
+    <style>
+        .active {
+            color: #ffd700 !important;
+        }
+
+        .data-plan h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .data-plan .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+
+        .data-plan .validity {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-plan small {
+            color: #999;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            padding: 0.3rem 0;
+            color: #666;
+        }
+
+        ul li::before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>
