@@ -56,20 +56,20 @@ const CONFIG = {
 
     // API ENDPOINTS (for production)
     api: {
-        baseUrl: 'https://your-backend-api.vercel.app/api',
+        baseUrl: 'https://your-project.vercel.app/api', // Update this after deployment
         endpoints: {
+            health: '/health',
+            verify: '/verify-payment',
+            webhook: '/webhook/paystack',
             airtime: '/recharge/airtime',
-            data: '/recharge/data',
-            verify: '/payment/verify',
-            login: '/auth/login',
-            register: '/auth/register'
+            data: '/recharge/data'
         }
     },
 
     // FEATURE FLAGS
     features: {
         enablePayments: true,
-        enableAPIIntegration: false, // Set to true when backend is ready
+        enableAPIIntegration: true, // Set to true when backend is ready
         enableSMS: false,
         enableEmail: false,
         enablePushNotifications: false

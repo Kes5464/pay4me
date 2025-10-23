@@ -1,0 +1,26 @@
+{
+  "name": "utilityhub-backend",
+  "version": "1.0.0",
+  "description": "Backend API for UtilityHub - Airtime and Data Purchase Platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "start": "vercel --prod"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "keywords": [
+    "paystack",
+    "airtime",
+    "data",
+    "nigeria",
+    "payments"
+  ],
+  "author": "UtilityHub",
+  "license": "MIT"
+}

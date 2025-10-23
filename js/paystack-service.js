@@ -149,28 +149,48 @@ class PaystackPaymentService {
     // Verify payment with backend
     async verifyPayment(reference) {
         try {
-            // This would call your backend API to verify with Paystack
-            // For now, we'll simulate verification
-            if (this.isTestMode) {
-                // In test mode, simulate successful verification
+            // Check if API integration is enabled
+            if (!CONFIG?.features?.enableAPIIntegration) {
+                // Fallback to simulated verification for testing
                 return {
                     success: true,
                     data: {
                         status: 'success',
                         reference: reference,
-                        amount: 0, // Will be filled by actual verification
-                        gateway_response: 'Successful'
+                        amount: 0,
+                        gateway_response: 'Successful (Test Mode)'
+                    }
+                };
+            }
+
+            // Call backend API for verification
+            const apiUrl = CONFIG?.api?.baseUrl || 'https://your-project.vercel.app/api';
+            const response = await fetch(`${apiUrl}/verify-payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reference: reference })
+            });
+
+            const result = await response.json();
+            return result;
+            
+        } catch (error) {
+            console.error('Payment verification error:', error);
+            
+            // Fallback for development/testing
+            if (this.isTestMode) {
+                return {
+                    success: true,
+                    data: {
+                        status: 'success',
+                        reference: reference,
+                        gateway_response: 'Successful (Fallback Mode)'
                     }
                 };
             }
             
-            // In production, this would be:
-            // const response = await fetch(`/api/verify-payment/${reference}`);
-            // return await response.json();
-            
-            return { success: true };
-        } catch (error) {
-            console.error('Payment verification error:', error);
             return { success: false, error: error.message };
         }
     }
