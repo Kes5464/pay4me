@@ -181,7 +181,7 @@ async function updateDataPlans(network) {
     setupDataPlans();
 }
 
-// Handle airtime recharge with API integration
+// Handle airtime recharge with Paystack integration
 async function handleAirtimeRecharge(e) {
     e.preventDefault();
     
@@ -207,55 +207,47 @@ async function handleAirtimeRecharge(e) {
         showMessage('Amount should be between ₦50 and ₦10,000', 'error');
         return;
     }
-    
+
+    // Check if Paystack is available
+    if (typeof paystackService === 'undefined' || !paystackService.isPaystackLoaded()) {
+        showMessage('Payment system is loading. Please try again in a moment.', 'error');
+        return;
+    }
+
     // Show loading
     const submitBtn = e.target.querySelector('.btn');
     const originalText = submitBtn.textContent;
     submitBtn.innerHTML = '<span class="loading"></span> Processing...';
     submitBtn.disabled = true;
-    
+
     try {
-        // Use API service for airtime purchase
-        const result = await apiService.processAirtimePurchase(phoneNumber, amount, selectedNetwork);
-        
-        if (result.success) {
-            // Save transaction to local storage
-            saveTransaction('airtime', {
-                phoneNumber,
-                amount,
-                network: selectedNetwork,
-                transactionId: result.transaction.transactionId,
-                confirmationCode: result.transaction.confirmationCode
-            });
-            
-            // Generate and show receipt with QR code
-            const receipt = apiService.generateTransactionReceipt({
-                type: 'airtime',
-                transactionId: result.transaction.transactionId,
-                amount: amount,
-                phoneNumber: phoneNumber,
-                network: selectedNetwork
-            });
-            
-            showTransactionReceipt(receipt);
-            showMessage(`${result.message} | Confirmation: ${result.transaction.confirmationCode}`, 'success');
-            
-            // Reset form
-            e.target.reset();
-            document.querySelectorAll('.network-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelectorAll('.quick-amount').forEach(btn => btn.classList.remove('selected'));
-            selectedNetwork = null;
-        } else {
-            showMessage(result.error, 'error');
+        // Get user email
+        const email = paystackService.getUserEmail();
+        if (!email) {
+            showMessage('Email is required for payment', 'error');
+            return;
         }
+
+        // Prepare payment data
+        const paymentData = {
+            email: email,
+            amount: parseFloat(amount),
+            phoneNumber: phoneNumber,
+            type: 'airtime',
+            network: selectedNetwork
+        };
+
+        // Initialize Paystack payment
+        await paystackService.initializePayment(paymentData);
+        
     } catch (error) {
-        showMessage('Service temporarily unavailable. Please try again later.', 'error');
-        console.error('Airtime recharge error:', error);
+        console.error('Airtime purchase error:', error);
+        showMessage(error.message || 'Failed to process payment. Please try again.', 'error');
+    } finally {
+        // Reset button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
     }
-    
-    // Reset button
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
 }
 
 // Handle data purchase with API integration
