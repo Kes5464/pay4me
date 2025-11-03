@@ -56,7 +56,7 @@ const CONFIG = {
 
     // API ENDPOINTS (for production)
     api: {
-        baseUrl: 'https://your-project.vercel.app/api', // Update this after deployment
+        baseUrl: 'https://pay4me-9iqj-pcdwa8nc9-kestine1s-projects.vercel.app/api',
         endpoints: {
             health: '/health',
             verify: '/verify-payment',
@@ -69,7 +69,7 @@ const CONFIG = {
     // FEATURE FLAGS
     features: {
         enablePayments: true,
-        enableAPIIntegration: true, // Set to true when backend is ready
+        enableAPIIntegration: true, // Backend URL configured
         enableSMS: false,
         enableEmail: false,
         enablePushNotifications: false
