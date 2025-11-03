@@ -4,6 +4,10 @@ let selectedDataPlan = null;
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing app...');
+    console.log('paystackService available:', typeof paystackService !== 'undefined');
+    console.log('PaystackPop available:', typeof PaystackPop !== 'undefined');
+    console.log('CONFIG available:', typeof CONFIG !== 'undefined');
     initializeApp();
 });
 
@@ -209,8 +213,15 @@ async function handleAirtimeRecharge(e) {
     }
 
     // Check if Paystack is available
-    if (typeof paystackService === 'undefined' || !paystackService.isPaystackLoaded()) {
+    if (typeof paystackService === 'undefined') {
+        showMessage('Payment service is not initialized. Please refresh the page.', 'error');
+        console.error('paystackService is undefined');
+        return;
+    }
+    
+    if (!paystackService.isPaystackLoaded()) {
         showMessage('Payment system is loading. Please try again in a moment.', 'error');
+        console.error('Paystack script not loaded');
         return;
     }
 
