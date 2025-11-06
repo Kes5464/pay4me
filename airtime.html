@@ -159,8 +159,22 @@
     <script src="js/paystack-service.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/realtime-features.js"></script>
-    <script src="js/utility-widget.js"></script>
+    <script>
+        // Only load external API components if enabled in config
+        document.addEventListener('DOMContentLoaded', function() {
+            if (CONFIG?.features?.enableRealTimeFeatures) {
+                const script1 = document.createElement('script');
+                script1.src = 'js/realtime-features.js';
+                document.head.appendChild(script1);
+            }
+            
+            if (CONFIG?.features?.enableUtilityWidget) {
+                const script2 = document.createElement('script');
+                script2.src = 'js/utility-widget.js';
+                document.head.appendChild(script2);
+            }
+        });
+    </script>
     <style>
         .quick-amount:hover {
             border-color: #667eea !important;
