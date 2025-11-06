@@ -1,0 +1,254 @@
+/* UtilityHub PWA Styles - Mobile App Experience */
+
+/* PWA Mode Specific Styles */
+.pwa-mode {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* iOS Safari PWA Status Bar */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .pwa-mode .header {
+    padding-top: calc(env(safe-area-inset-top) + 1rem);
+  }
+}
+
+/* Install Button Styles */
+.install-btn {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 12px 20px !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+  z-index: 1000 !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.install-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+}
+
+.install-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* Splash Screen */
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Update Notification */
+.update-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  max-width: 300px;
+}
+
+/* App-like Navigation */
+.pwa-mode .header {
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Full Screen Forms */
+@media (display-mode: standalone) {
+  .form-container {
+    margin: 0;
+    border-radius: 0;
+    min-height: calc(100vh - 80px);
+    padding: 2rem 1rem;
+  }
+  
+  .container {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+/* Improved Touch Targets */
+.pwa-mode button,
+.pwa-mode .btn,
+.pwa-mode .network-option,
+.pwa-mode .quick-amount {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 16px;
+}
+
+/* Haptic Feedback Animation */
+.haptic-feedback {
+  animation: hapticPulse 0.1s ease-out;
+}
+
+@keyframes hapticPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Network Status Indicator */
+.network-status {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  z-index: 1000;
+  display: none;
+}
+
+.network-status.offline {
+  display: block;
+  background: #ef4444;
+}
+
+.network-status.online {
+  display: block;
+  background: #10b981;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Loading Spinner for PWA */
+.pwa-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Bottom Navigation for PWA */
+.pwa-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 100;
+}
+
+.pwa-bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  min-width: 60px;
+}
+
+.pwa-bottom-nav a.active,
+.pwa-bottom-nav a:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pwa-bottom-nav a .icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+/* Hide bottom nav in regular browser */
+.pwa-bottom-nav {
+  display: none;
+}
+
+.pwa-mode .pwa-bottom-nav {
+  display: flex;
+}
+
+/* Adjust content for bottom nav in PWA mode */
+.pwa-mode .main {
+  padding-bottom: 80px;
+}
+
+/* Smooth scrolling for PWA */
+.pwa-mode {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for PWA */
+.pwa-mode ::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pwa-mode ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pwa-mode ::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 2px;
+}
+
+/* Prevent text selection in PWA mode */
+.pwa-mode {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* But allow text selection in form inputs */
+.pwa-mode input,
+.pwa-mode textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
