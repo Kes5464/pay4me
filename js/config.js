@@ -72,7 +72,10 @@ const CONFIG = {
         enableAPIIntegration: true, // Backend URL configured
         enableSMS: false,
         enableEmail: false,
-        enablePushNotifications: false
+        enablePushNotifications: false,
+        enableExternalAPIs: false, // Disable external APIs to prevent CORS issues
+        enableRealTimeFeatures: false, // Disable real-time widgets temporarily
+        enableUtilityWidget: false // Disable utility widget temporarily
     }
 };
 

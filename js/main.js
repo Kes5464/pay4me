@@ -13,11 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize the application
 function initializeApp() {
+    console.log('Initializing UtilityHub...');
     setupMobileMenu();
     setupFormHandlers();
     setupNetworkSelection();
     setupDataPlans();
     addFadeInAnimations();
+    console.log('UtilityHub initialization complete');
 }
 
 // Mobile menu functionality

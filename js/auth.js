@@ -133,16 +133,28 @@ function validatePasswordConfirmation(e) {
 }
 
 // Validate phone number
-function validatePhoneNumber(e) {
-    const phone = e.target.value;
+function validatePhoneNumber(input) {
+    // Handle both event objects and direct string input
+    const phone = typeof input === 'string' ? input : (input.target ? input.target.value : input.value || input);
     const phoneRegex = /^(\+234|234|0)[7-9][0-1]\d{8}$/;
     
-    if (phone && !phoneRegex.test(phone.replace(/\s/g, ''))) {
-        showFieldError(e.target, 'Please enter a valid Nigerian phone number');
+    if (!phone) {
         return false;
     }
     
-    clearFieldError(e.target);
+    const cleanPhone = phone.replace(/\s/g, '');
+    if (!phoneRegex.test(cleanPhone)) {
+        // If it's an event object, show field error
+        if (input.target) {
+            showFieldError(input.target, 'Please enter a valid Nigerian phone number');
+        }
+        return false;
+    }
+    
+    // Clear field error if it's an event object
+    if (input.target) {
+        clearFieldError(input.target);
+    }
     return true;
 }
 
