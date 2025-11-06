@@ -1,24 +1,24 @@
 // Service Worker for UtilityHub PWA
 // Provides offline functionality and app-like experience
 
-const CACHE_NAME = 'utilityhub-v1.0.3';
+const CACHE_NAME = 'utilityhub-v1.0.4';
 const urlsToCache = [
-  '/pay4me/',
-  '/pay4me/index.html',
-  '/pay4me/airtime.html',
-  '/pay4me/data.html',
-  '/pay4me/sportybet.html',
-  '/pay4me/login.html',
-  '/pay4me/css/style.css',
-  '/pay4me/js/main.js',
-  '/pay4me/js/auth.js',
-  '/pay4me/js/config.js',
-  '/pay4me/js/paystack-service.js',
-  '/pay4me/js/api-service.js',
-  '/pay4me/manifest.json',
+  '/',
+  '/index.html',
+  '/airtime.html',
+  '/data.html',
+  '/sportybet.html',
+  '/login.html',
+  '/css/style.css',
+  '/js/main.js',
+  '/js/auth.js',
+  '/js/config.js',
+  '/js/paystack-service.js',
+  '/js/api-service.js',
+  '/manifest.json',
   // Add icon files when created
-  '/pay4me/images/icon-192x192.png',
-  '/pay4me/images/icon-512x512.png'
+  '/images/icon-192x192.png',
+  '/images/icon-512x512.png'
 ];
 
 // Install event - cache resources
