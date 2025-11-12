@@ -15,6 +15,22 @@ const CONFIG = {
         channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer']
     },
 
+    // OAUTH AUTHENTICATION SETTINGS
+    oauth: {
+        google: {
+            // Get from: https://console.developers.google.com
+            // Create OAuth 2.0 Client ID for Web Application
+            clientId: 'YOUR_GOOGLE_CLIENT_ID.googleusercontent.com',
+            scope: 'email profile'
+        },
+        facebook: {
+            // Get from: https://developers.facebook.com
+            // Create Facebook App and get App ID
+            appId: 'YOUR_FACEBOOK_APP_ID',
+            scope: 'email,public_profile'
+        }
+    },
+
     // APPLICATION SETTINGS
     app: {
         name: 'UtilityHub',

@@ -1,0 +1,27 @@
+# Deploy to Netlify for Easy Custom Domain
+# This is much simpler than GitHub Pages + custom domain
+
+# Step 1: Create netlify.toml configuration
+[build]
+  publish = "."
+  
+[build.environment]
+  NODE_VERSION = "18"
+
+# Step 2: Set up redirects for SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
+# Step 3: Headers for PWA
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/json"
+    
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+    Service-Worker-Allowed = "/"
