@@ -10,7 +10,7 @@ export default function handler(req, res) {
 
     const healthData = {
         status: 'healthy',
-        message: 'UtilityHub Backend API is running',
+        message: 'Pay4me Backend API is running',
         timestamp: new Date().toISOString(),
         version: '1.0.0',
         environment: process.env.NODE_ENV || 'production',
@@ -19,16 +19,34 @@ export default function handler(req, res) {
                 configured: !!process.env.PAYSTACK_SECRET_KEY,
                 test_mode: process.env.PAYSTACK_SECRET_KEY?.startsWith('sk_test') || false
             },
+            hustlesim: {
+                configured: !!process.env.HUSTLESIM_API_KEY,
+                enabled: !!process.env.HUSTLESIM_API_KEY
+            },
             database: {
                 configured: false, // TODO: Add when database is connected
                 connected: false
             }
         },
         endpoints: [
-            'GET /api/health',
-            'POST /api/verify-payment',
-            'POST /api/webhook/paystack'
-        ]
+            'GET /api/health - Health check',
+            'POST /api/recharge - Universal recharge endpoint',
+            'GET /api/transactions - Transaction history',
+            'GET /api/my-phone - Get saved phone',
+            'POST /api/my-phone - Save phone number',
+            'DELETE /api/my-phone - Delete saved phone',
+            'POST /api/verify-payment - Verify Paystack payment',
+            'POST /api/webhook/paystack - Payment webhooks'
+        ],
+        features: {
+            airtime_recharge: true,
+            data_purchase: true,
+            my_phone_feature: true,
+            transaction_history: true,
+            paystack_integration: true,
+            multi_provider_support: true,
+            webhook_support: true
+        }
     };
 
     res.status(200).json(healthData);

@@ -61,6 +61,112 @@ function setupFormHandlers() {
     if (dataForm) {
         dataForm.addEventListener('submit', handleDataPurchase);
     }
+
+    // My Phone functionality
+    setupMyPhoneFeature();
+}
+
+// Setup My Phone feature
+function setupMyPhoneFeature() {
+    // Airtime page "My Phone" buttons
+    const useMyPhoneBtn = document.getElementById('useMyPhone');
+    const saveMyPhoneBtn = document.getElementById('saveMyPhone');
+    const myPhoneStatus = document.getElementById('myPhoneStatus');
+
+    // Data page "My Phone" buttons  
+    const useMyPhoneBtnData = document.getElementById('useMyPhoneData');
+    const saveMyPhoneBtnData = document.getElementById('saveMyPhoneData');
+    const myPhoneStatusData = document.getElementById('myPhoneStatusData');
+
+    // Load and display saved phone number on page load
+    const savedPhone = localStorage.getItem('myPhoneNumber');
+    if (savedPhone) {
+        if (myPhoneStatus) myPhoneStatus.textContent = `Saved: ${savedPhone}`;
+        if (myPhoneStatusData) myPhoneStatusData.textContent = `Saved: ${savedPhone}`;
+    }
+
+    // Use My Phone for airtime
+    if (useMyPhoneBtn) {
+        useMyPhoneBtn.addEventListener('click', function() {
+            const savedPhone = localStorage.getItem('myPhoneNumber');
+            if (savedPhone) {
+                document.getElementById('phoneNumber').value = savedPhone;
+                // Auto-detect network
+                const network = detectNetwork(savedPhone);
+                if (network) {
+                    selectNetworkOption(network);
+                }
+                showMessage('✅ Your phone number loaded!', 'success');
+            } else {
+                showMessage('❌ No saved phone number. Please save your phone first.', 'error');
+            }
+        });
+    }
+
+    // Use My Phone for data
+    if (useMyPhoneBtnData) {
+        useMyPhoneBtnData.addEventListener('click', function() {
+            const savedPhone = localStorage.getItem('myPhoneNumber');
+            if (savedPhone) {
+                document.getElementById('dataPhoneNumber').value = savedPhone;
+                // Auto-detect network
+                const network = detectNetwork(savedPhone);
+                if (network) {
+                    selectNetworkOption(network);
+                }
+                showMessage('✅ Your phone number loaded!', 'success');
+            } else {
+                showMessage('❌ No saved phone number. Please save your phone first.', 'error');
+            }
+        });
+    }
+
+    // Save My Phone for airtime
+    if (saveMyPhoneBtn) {
+        saveMyPhoneBtn.addEventListener('click', function() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (validatePhoneNumber(phoneNumber)) {
+                localStorage.setItem('myPhoneNumber', phoneNumber);
+                myPhoneStatus.textContent = `Saved: ${phoneNumber}`;
+                if (myPhoneStatusData) myPhoneStatusData.textContent = `Saved: ${phoneNumber}`;
+                showMessage('✅ Your phone number saved successfully!', 'success');
+            } else {
+                showMessage('❌ Please enter a valid phone number first.', 'error');
+            }
+        });
+    }
+
+    // Save My Phone for data
+    if (saveMyPhoneBtnData) {
+        saveMyPhoneBtnData.addEventListener('click', function() {
+            const phoneNumber = document.getElementById('dataPhoneNumber').value;
+            if (validatePhoneNumber(phoneNumber)) {
+                localStorage.setItem('myPhoneNumber', phoneNumber);
+                myPhoneStatusData.textContent = `Saved: ${phoneNumber}`;
+                if (myPhoneStatus) myPhoneStatus.textContent = `Saved: ${phoneNumber}`;
+                showMessage('✅ Your phone number saved successfully!', 'success');
+            } else {
+                showMessage('❌ Please enter a valid phone number first.', 'error');
+            }
+        });
+    }
+}
+
+// Helper function to select network option
+function selectNetworkOption(network) {
+    const networkOptions = document.querySelectorAll('.network-option');
+    networkOptions.forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.network === network) {
+            option.classList.add('selected');
+            selectedNetwork = network;
+            
+            // Update data plans if on data page
+            if (document.getElementById('dataPlans')) {
+                updateDataPlans(network);
+            }
+        }
+    });
 }
 
 // Network selection functionality
