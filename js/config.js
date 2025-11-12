@@ -1,4 +1,4 @@
-// Configuration file for UtilityHub
+// Configuration file for Pay4me
 // Add your actual API keys here
 
 const CONFIG = {
@@ -33,7 +33,7 @@ const CONFIG = {
 
     // APPLICATION SETTINGS
     app: {
-        name: 'UtilityHub',
+        name: 'Pay4me',
         version: '1.0.0',
         environment: 'test', // 'test' or 'production'
         
@@ -63,8 +63,8 @@ const CONFIG = {
         
         // Business information
         info: {
-            name: 'UtilityHub',
-            email: 'support@utilityhub.com',
+            name: 'Pay4me',
+            email: 'support@pay4me.com.ng',
             phone: '+234XXXXXXXXXX',
             address: 'Your Business Address'
         }

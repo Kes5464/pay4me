@@ -77,7 +77,7 @@ class PaystackPaymentService {
             ref: reference,
             channels: this.config.channels,
             metadata: metadata,
-            label: `UtilityHub - ${type === 'airtime' ? 'Airtime' : 'Data'} Purchase`,
+            label: `Pay4me - ${type === 'airtime' ? 'Airtime' : 'Data'} Purchase`,
             
             // Success callback
             onSuccess: (transaction) => {

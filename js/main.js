@@ -13,13 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize the application
 function initializeApp() {
-    console.log('Initializing UtilityHub...');
+    console.log('Initializing Pay4me...');
     setupMobileMenu();
     setupFormHandlers();
     setupNetworkSelection();
     setupDataPlans();
     addFadeInAnimations();
-    console.log('UtilityHub initialization complete');
+    console.log('Pay4me initialization complete');
 }
 
 // Mobile menu functionality
@@ -823,11 +823,11 @@ function printReceipt(transactionId) {
             <body>
                 <div class="receipt">
                     <div class="header">
-                        <h2>UtilityHub Transaction Receipt</h2>
+                        <h2>Pay4me Transaction Receipt</h2>
                         <p>Transaction ID: ${transactionId}</p>
                     </div>
                     <div class="details">
-                        <p>Thank you for using UtilityHub!</p>
+                        <p>Thank you for using Pay4me!</p>
                         <p>Transaction completed successfully.</p>
                         <p>Time: ${new Date().toLocaleString()}</p>
                     </div>

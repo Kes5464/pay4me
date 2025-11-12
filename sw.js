@@ -1,7 +1,7 @@
-// Service Worker for UtilityHub PWA
+// Service Worker for Pay4me PWA
 // Provides offline functionality and app-like experience
 
-const CACHE_NAME = 'utilityhub-v1.0.6';
+const CACHE_NAME = 'pay4me-v1.0.7';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -141,7 +141,7 @@ self.addEventListener('push', function(event) {
   };
 
   event.waitUntil(
-    self.registration.showNotification('UtilityHub', options)
+    self.registration.showNotification('Pay4me', options)
   );
 });
 
@@ -171,4 +171,4 @@ self.addEventListener('message', function(event) {
   }
 });
 
-console.log('🚀 UtilityHub Service Worker loaded successfully!');
+console.log('🚀 Pay4me Service Worker loaded successfully!');

@@ -1,6 +1,6 @@
 {
-  "name": "UtilityHub - Airtime & Data Recharge",
-  "short_name": "UtilityHub",
+  "name": "Pay4me - Airtime & Data Recharge",
+  "short_name": "Pay4me",
   "description": "Recharge airtime, buy data bundles for MTN, Airtel, Glo networks. Fast, secure, and convenient!",
   "start_url": "/",
   "display": "standalone",
