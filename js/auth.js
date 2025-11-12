@@ -1,9 +1,14 @@
-// Authentication JavaScript
-// This handles login, signup, and password reset functionality
+// Real Authentication JavaScript
+// Handles real user registration, login with email/phone verification
 
 // Global variables for authentication
 let currentUser = null;
-let authState = 'login'; // 'login', 'signup', 'forgot'
+let authState = 'login'; // 'login', 'signup', 'forgot', 'verify'
+
+// API base URL
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'https://kes5464.github.io/pay4me/api';
 
 // Initialize authentication on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -25,15 +30,209 @@ function setupAuthForms() {
     const forgotForm = document.getElementById('forgotForm');
 
     if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
+        loginForm.addEventListener('submit', handleRealLogin);
     }
 
     if (signupForm) {
-        signupForm.addEventListener('submit', handleSignup);
+        signupForm.addEventListener('submit', handleRealSignup);
     }
 
     if (forgotForm) {
         forgotForm.addEventListener('submit', handleForgotPassword);
+    }
+}
+
+// Handle real user signup with verification
+async function handleRealSignup(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const signupData = {
+        name: formData.get('signupName'),
+        email: formData.get('signupEmail'),
+        phone: formData.get('signupPhone'),
+        password: formData.get('signupPassword'),
+        confirmPassword: formData.get('confirmPassword'),
+        verificationType: formData.get('verificationType') || 'email'
+    };
+
+    // Validation
+    if (!signupData.name || !signupData.email || !signupData.phone || !signupData.password) {
+        showMessage('All fields are required', 'error');
+        return;
+    }
+
+    if (signupData.password !== signupData.confirmPassword) {
+        showMessage('Passwords do not match', 'error');
+        return;
+    }
+
+    if (signupData.password.length < 6) {
+        showMessage('Password must be at least 6 characters long', 'error');
+        return;
+    }
+
+    try {
+        showLoadingState('Creating your account...');
+
+        const response = await fetch(`${API_BASE}/auth?action=register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(signupData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Store verification info
+            sessionStorage.setItem('pendingVerification', JSON.stringify({
+                userId: result.data.userId,
+                verificationType: result.data.verificationType,
+                verificationMethod: result.data.verificationMethod
+            }));
+
+            // Show verification form
+            showVerificationForm(result.data);
+            showMessage(result.message, 'success');
+        } else {
+            showMessage(result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        showMessage('Network error. Please try again.', 'error');
+    } finally {
+        hideLoadingState();
+    }
+}
+
+// Handle account verification
+async function handleVerification(userId, otp) {
+    try {
+        showLoadingState('Verifying your account...');
+
+        const response = await fetch(`${API_BASE}/auth?action=verify`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, otp })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Store authentication token
+            localStorage.setItem('authToken', result.data.token);
+            localStorage.setItem('currentUser', JSON.stringify(result.data.user));
+            
+            currentUser = result.data.user;
+            
+            // Clear pending verification
+            sessionStorage.removeItem('pendingVerification');
+            
+            showMessage('Account verified successfully! Welcome to Pay4me!', 'success');
+            
+            // Redirect to main app
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        } else {
+            showMessage(result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Verification error:', error);
+        showMessage('Verification failed. Please try again.', 'error');
+    } finally {
+        hideLoadingState();
+    }
+}
+
+// Handle real user login
+async function handleRealLogin(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const loginData = {
+        identifier: formData.get('loginEmail'), // Can be email or phone
+        password: formData.get('loginPassword')
+    };
+
+    if (!loginData.identifier || !loginData.password) {
+        showMessage('Email/phone and password are required', 'error');
+        return;
+    }
+
+    try {
+        showLoadingState('Signing you in...');
+
+        const response = await fetch(`${API_BASE}/auth?action=login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Store authentication
+            localStorage.setItem('authToken', result.data.token);
+            localStorage.setItem('currentUser', JSON.stringify(result.data.user));
+            
+            currentUser = result.data.user;
+            
+            showMessage('Login successful! Welcome back!', 'success');
+            
+            // Redirect to main app
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } else {
+            showMessage(result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showMessage('Network error. Please try again.', 'error');
+    } finally {
+        hideLoadingState();
+    }
+}
+
+// Resend OTP
+async function resendOTP() {
+    const pendingVerification = JSON.parse(sessionStorage.getItem('pendingVerification'));
+    
+    if (!pendingVerification) {
+        showMessage('No pending verification found', 'error');
+        return;
+    }
+
+    try {
+        showLoadingState('Sending new code...');
+
+        const response = await fetch(`${API_BASE}/auth?action=resend-otp`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId: pendingVerification.userId })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showMessage('New verification code sent!', 'success');
+        } else {
+            showMessage(result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Resend OTP error:', error);
+        showMessage('Failed to resend code. Please try again.', 'error');
+    } finally {
+        hideLoadingState();
     }
 }
 
@@ -453,6 +652,147 @@ function logout() {
     sessionStorage.removeItem('currentUser');
     showMessage('Logged out successfully', 'success');
     
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 1500);
+}
+
+// Show verification form
+function showVerificationForm(verificationData) {
+    const authContainer = document.querySelector('.form-container');
+    
+    const verificationHTML = `
+        <div id="verificationForm" class="verification-container">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">
+                📧 Verify Your Account
+            </h2>
+            
+            <div class="verification-info" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; text-align: center;">
+                <p style="margin-bottom: 1rem; color: #666;">
+                    We've sent a 6-digit verification code to:
+                </p>
+                <p style="font-weight: bold; color: #007bff; font-size: 1.1rem;">
+                    ${verificationData.verificationMethod}
+                </p>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                    The code expires in 10 minutes
+                </p>
+            </div>
+
+            <form id="otpForm" onsubmit="handleOTPSubmission(event)">
+                <div class="form-group">
+                    <label for="otpCode">Verification Code</label>
+                    <input type="text" id="otpCode" name="otpCode" placeholder="Enter 6-digit code" 
+                           maxlength="6" pattern="[0-9]{6}" required 
+                           style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem; font-weight: bold;">
+                    <small style="color: #666;">Check your ${verificationData.verificationType === 'phone' ? 'SMS' : 'email'} for the code</small>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; margin-bottom: 1rem;">
+                    ✅ Verify Account
+                </button>
+            </form>
+
+            <div style="text-align: center;">
+                <p style="color: #666; margin-bottom: 1rem;">Didn't receive the code?</p>
+                <button type="button" onclick="resendOTP()" class="btn" style="background: #6c757d;">
+                    📱 Resend Code
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="button" onclick="backToSignup()" style="background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline;">
+                    ← Back to Sign Up
+                </button>
+            </div>
+        </div>
+    `;
+    
+    authContainer.innerHTML = verificationHTML;
+}
+
+// Handle OTP form submission
+function handleOTPSubmission(e) {
+    e.preventDefault();
+    
+    const otpCode = document.getElementById('otpCode').value;
+    const pendingVerification = JSON.parse(sessionStorage.getItem('pendingVerification'));
+    
+    if (!otpCode || otpCode.length !== 6) {
+        showMessage('Please enter a valid 6-digit code', 'error');
+        return;
+    }
+    
+    if (!pendingVerification) {
+        showMessage('Verification session expired. Please sign up again.', 'error');
+        return;
+    }
+    
+    handleVerification(pendingVerification.userId, otpCode);
+}
+
+// Back to signup form
+function backToSignup() {
+    sessionStorage.removeItem('pendingVerification');
+    window.location.reload();
+}
+
+// Show loading state
+function showLoadingState(message) {
+    const submitBtns = document.querySelectorAll('button[type="submit"]');
+    submitBtns.forEach(btn => {
+        btn.innerHTML = `<span class="loading"></span> ${message}`;
+        btn.disabled = true;
+    });
+}
+
+// Hide loading state
+function hideLoadingState() {
+    const submitBtns = document.querySelectorAll('button[type="submit"]');
+    submitBtns.forEach(btn => {
+        btn.disabled = false;
+        // Restore original text based on button context
+        if (btn.closest('#loginForm')) {
+            btn.textContent = 'Sign In';
+        } else if (btn.closest('#signupForm')) {
+            btn.textContent = 'Create Account';
+        } else if (btn.closest('#otpForm')) {
+            btn.textContent = '✅ Verify Account';
+        }
+    });
+}
+
+// Check for real authentication
+function checkExistingSession() {
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('currentUser');
+    
+    if (token && userData) {
+        currentUser = JSON.parse(userData);
+        
+        // If user is already authenticated and on login page, redirect
+        if (window.location.pathname.includes('login.html')) {
+            window.location.href = 'index.html';
+        }
+    } else {
+        // If not authenticated and on protected page, redirect to login
+        const protectedPages = ['airtime.html', 'data.html', 'sportybet.html'];
+        const currentPage = window.location.pathname.split('/').pop();
+        
+        if (protectedPages.includes(currentPage)) {
+            window.location.href = 'login.html';
+        }
+    }
+}
+
+// Real logout function
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    sessionStorage.clear();
+    currentUser = null;
+    
+    showMessage('You have been logged out', 'success');
     setTimeout(() => {
         window.location.href = 'login.html';
     }, 1500);

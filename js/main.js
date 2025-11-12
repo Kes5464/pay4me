@@ -2,14 +2,50 @@
 let selectedNetwork = null;
 let selectedDataPlan = null;
 
+// API base URL
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'https://kes5464.github.io/pay4me/api';
+
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing app...');
     console.log('paystackService available:', typeof paystackService !== 'undefined');
     console.log('PaystackPop available:', typeof PaystackPop !== 'undefined');
     console.log('CONFIG available:', typeof CONFIG !== 'undefined');
+    
+    // Check authentication first
+    checkAuthentication();
     initializeApp();
 });
+
+// Check if user is authenticated
+function checkAuthentication() {
+    const token = localStorage.getItem('authToken');
+    const protectedPages = ['airtime.html', 'data.html', 'sportybet.html'];
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    if (protectedPages.includes(currentPage) && !token) {
+        showMessage('Please log in to use this feature', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+        return false;
+    }
+    
+    return true;
+}
+
+// Get authentication token
+function getAuthToken() {
+    return localStorage.getItem('authToken');
+}
+
+// Get current user
+function getCurrentUser() {
+    const userData = localStorage.getItem('currentUser');
+    return userData ? JSON.parse(userData) : null;
+}
 
 // Initialize the application
 function initializeApp() {
@@ -293,12 +329,20 @@ async function updateDataPlans(network) {
     setupDataPlans();
 }
 
-// Handle airtime recharge with Paystack integration
+// Handle airtime recharge with real authentication
 async function handleAirtimeRecharge(e) {
     e.preventDefault();
     
+    // Check authentication
+    const token = getAuthToken();
+    if (!token) {
+        showMessage('Please log in to make a recharge', 'error');
+        setTimeout(() => window.location.href = 'login.html', 2000);
+        return;
+    }
+    
     const phoneNumber = document.getElementById('phoneNumber').value;
-    const amount = document.getElementById('amount').value;
+    const amount = parseFloat(document.getElementById('amount').value);
     
     if (!selectedNetwork) {
         showMessage('Please select a network', 'error');
@@ -320,19 +364,6 @@ async function handleAirtimeRecharge(e) {
         return;
     }
 
-    // Check if Paystack is available
-    if (typeof paystackService === 'undefined') {
-        showMessage('Payment service is not initialized. Please refresh the page.', 'error');
-        console.error('paystackService is undefined');
-        return;
-    }
-    
-    if (!paystackService.isPaystackLoaded()) {
-        showMessage('Payment system is loading. Please try again in a moment.', 'error');
-        console.error('Paystack script not loaded');
-        return;
-    }
-
     // Show loading
     const submitBtn = e.target.querySelector('.btn');
     const originalText = submitBtn.textContent;
@@ -340,8 +371,54 @@ async function handleAirtimeRecharge(e) {
     submitBtn.disabled = true;
 
     try {
-        // Get user email
-        const email = paystackService.getUserEmail();
+        const reference = `PAY4ME_AIRTIME_${Date.now()}`;
+        
+        // Call real recharge API
+        const response = await fetch(`${API_BASE}/recharge`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                type: 'airtime',
+                network: selectedNetwork,
+                phoneNumber: phoneNumber,
+                amount: amount,
+                reference: reference
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Save transaction to local storage for history
+            saveTransaction({
+                ...result.data,
+                timestamp: new Date().toISOString()
+            });
+
+            showMessage(`✅ Airtime recharge successful! Confirmation: ${result.data.confirmationCode}`, 'success');
+            
+            // Reset form
+            document.getElementById('amount').value = '';
+            selectedNetwork = null;
+            document.querySelectorAll('.network-option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Update transaction display
+            updateRecentTransactions();
+        } else {
+            showMessage(`❌ Recharge failed: ${result.message}`, 'error');
+        }
+    } catch (error) {
+        console.error('Recharge error:', error);
+        showMessage('❌ Network error. Please check your connection and try again.', 'error');
+    } finally {
+        // Restore button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+}
         if (!email) {
             showMessage('Email is required for payment', 'error');
             return;
@@ -369,9 +446,17 @@ async function handleAirtimeRecharge(e) {
     }
 }
 
-// Handle data purchase with API integration
+// Handle data purchase with real authentication
 async function handleDataPurchase(e) {
     e.preventDefault();
+    
+    // Check authentication
+    const token = getAuthToken();
+    if (!token) {
+        showMessage('Please log in to purchase data', 'error');
+        setTimeout(() => window.location.href = 'login.html', 2000);
+        return;
+    }
     
     const phoneNumber = document.getElementById('dataPhoneNumber').value;
     
@@ -400,6 +485,58 @@ async function handleDataPurchase(e) {
     const originalText = submitBtn.textContent;
     submitBtn.innerHTML = '<span class="loading"></span> Processing...';
     submitBtn.disabled = true;
+    
+    try {
+        const reference = `PAY4ME_DATA_${Date.now()}`;
+        
+        // Call real data purchase API
+        const response = await fetch(`${API_BASE}/recharge`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                type: 'data',
+                network: selectedNetwork,
+                phoneNumber: phoneNumber,
+                amount: parseFloat(selectedDataPlan.price),
+                dataSize: selectedDataPlan.size,
+                reference: reference
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Save transaction to local storage for history
+            saveTransaction({
+                ...result.data,
+                timestamp: new Date().toISOString()
+            });
+
+            showMessage(`✅ Data bundle purchased successfully! You will receive ${selectedDataPlan.size} data. Confirmation: ${result.data.confirmationCode}`, 'success');
+            
+            // Reset form
+            selectedDataPlan = null;
+            selectedNetwork = null;
+            document.querySelectorAll('.network-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.data-plan').forEach(plan => plan.classList.remove('selected'));
+            
+            // Update transaction display
+            updateRecentTransactions();
+        } else {
+            showMessage(`❌ Data purchase failed: ${result.message}`, 'error');
+        }
+    } catch (error) {
+        console.error('Data purchase error:', error);
+        showMessage('❌ Network error. Please check your connection and try again.', 'error');
+    } finally {
+        // Reset button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+}
     
     try {
         // Use API service for data purchase
@@ -441,6 +578,57 @@ async function handleDataPurchase(e) {
     // Reset button
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
+}
+
+// Save transaction to local storage
+function saveTransaction(transaction) {
+    const transactions = JSON.parse(localStorage.getItem('pay4meTransactions') || '[]');
+    transactions.unshift(transaction); // Add to beginning
+    
+    // Keep only last 50 transactions
+    if (transactions.length > 50) {
+        transactions.splice(50);
+    }
+    
+    localStorage.setItem('pay4meTransactions', JSON.stringify(transactions));
+}
+
+// Get transactions from local storage
+function getTransactions() {
+    return JSON.parse(localStorage.getItem('pay4meTransactions') || '[]');
+}
+
+// Update recent transactions display
+function updateRecentTransactions() {
+    const transactionContainer = document.getElementById('recentTransactions');
+    if (!transactionContainer) return;
+    
+    const transactions = getTransactions().slice(0, 5); // Show last 5
+    
+    if (transactions.length === 0) {
+        transactionContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">No recent transactions</p>';
+        return;
+    }
+    
+    const transactionHTML = transactions.map(tx => {
+        const time = new Date(tx.processedAt || tx.timestamp).toLocaleString();
+        const statusIcon = tx.status === 'completed' ? '✅' : tx.status === 'failed' ? '❌' : '⏳';
+        
+        return `
+            <div style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 1rem; background: white;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <strong>${statusIcon} ${tx.type === 'airtime' ? '📞 Airtime' : '📶 Data'}</strong>
+                    <span style="color: #666; font-size: 0.9rem;">${time}</span>
+                </div>
+                <div style="color: #666; font-size: 0.9rem;">
+                    ${tx.phoneNumber} • ${tx.network?.toUpperCase()} • ${tx.type === 'airtime' ? '₦' + tx.amount : tx.dataSize}
+                </div>
+                ${tx.confirmationCode ? `<div style="color: #28a745; font-size: 0.8rem; margin-top: 0.5rem;">Code: ${tx.confirmationCode}</div>` : ''}
+            </div>
+        `;
+    }).join('');
+    
+    transactionContainer.innerHTML = transactionHTML;
 }
 
 // Validate phone number

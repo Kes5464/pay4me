@@ -126,6 +126,21 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label>Verification Method</label>
+                            <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="verificationType" value="email" checked style="margin-right: 0.5rem;">
+                                    📧 Email
+                                </label>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="verificationType" value="phone" style="margin-right: 0.5rem;">
+                                    📱 SMS
+                                </label>
+                            </div>
+                            <small style="color: #666;">Choose how you want to receive your verification code</small>
+                        </div>
+
                         <div class="form-options">
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" id="agreeTerms" name="agreeTerms" required>

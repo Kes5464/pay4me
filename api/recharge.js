@@ -1,5 +1,7 @@
 // Universal Recharge API Endpoint
-// Handles both airtime and data recharge requests
+// Handles both airtime and data recharge requests with real authentication
+
+import jwt from 'jsonwebtoken';
 
 export default function handler(req, res) {
     // CORS headers
@@ -23,6 +25,12 @@ export default function handler(req, res) {
 
 async function handleRechargeRequest(req, res) {
     try {
+        // Verify authentication
+        const authResult = verifyAuthentication(req);
+        if (!authResult.success) {
+            return res.status(401).json(authResult);
+        }
+
         const { type, network, phoneNumber, amount, dataSize, reference } = req.body;
 
         // Validation
@@ -34,12 +42,12 @@ async function handleRechargeRequest(req, res) {
             });
         }
 
-        // Process the recharge
+        // Process the recharge (REAL PROVIDERS ONLY)
         let result;
         if (type === 'airtime') {
-            result = await processAirtimeRecharge(network, phoneNumber, amount, reference);
+            result = await processAirtimeRecharge(network, phoneNumber, amount, reference, authResult.user);
         } else if (type === 'data') {
-            result = await processDataRecharge(network, phoneNumber, dataSize, amount, reference);
+            result = await processDataRecharge(network, phoneNumber, dataSize, amount, reference, authResult.user);
         } else {
             return res.status(400).json({
                 success: false,
@@ -61,7 +69,8 @@ async function handleRechargeRequest(req, res) {
                 type: type,
                 status: result.status || 'completed',
                 processedAt: new Date().toISOString(),
-                provider: result.provider || 'Pay4me',
+                provider: result.provider,
+                userId: authResult.user.userId,
                 ...(type === 'data' && { dataSize: dataSize })
             }
         });
@@ -75,6 +84,103 @@ async function handleRechargeRequest(req, res) {
             reference: req.body.reference
         });
     }
+}
+
+// Verify user authentication
+function verifyAuthentication(req) {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return {
+            success: false,
+            message: 'Authentication required. Please log in to make recharges.'
+        };
+    }
+
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'pay4me_secret_key');
+        return {
+            success: true,
+            user: decoded
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: 'Invalid or expired token. Please log in again.'
+        };
+    }
+}
+
+// Process airtime recharge (REAL PROVIDERS ONLY - NO SIMULATION)
+async function processAirtimeRecharge(network, phoneNumber, amount, reference, user) {
+    console.log(`Processing REAL airtime: ${network} - ${phoneNumber} - ₦${amount} for user ${user.userId}`);
+    
+    // Try HustleSIM API first
+    if (process.env.HUSTLESIM_API_KEY) {
+        try {
+            return await callHustleSimAPI('airtime', network, phoneNumber, amount, reference);
+        } catch (error) {
+            console.log('HustleSIM failed:', error.message);
+        }
+    }
+    
+    // Try Paystack Bills API
+    if (process.env.PAYSTACK_SECRET_KEY) {
+        try {
+            return await callPaystackBills('airtime', network, phoneNumber, amount, reference);
+        } catch (error) {
+            console.log('Paystack Bills failed:', error.message);
+        }
+    }
+    
+    // Try VTPass API
+    if (process.env.VTPASS_API_KEY) {
+        try {
+            return await callVTPassAPI('airtime', network, phoneNumber, amount, reference);
+        } catch (error) {
+            console.log('VTPass failed:', error.message);
+        }
+    }
+    
+    // If all real providers fail, return error
+    throw new Error('All recharge providers are currently unavailable. Please try again later or contact support.');
+}
+
+// Process data recharge (REAL PROVIDERS ONLY - NO SIMULATION)
+async function processDataRecharge(network, phoneNumber, dataSize, amount, reference, user) {
+    console.log(`Processing REAL data: ${network} - ${phoneNumber} - ${dataSize} - ₦${amount} for user ${user.userId}`);
+    
+    // Try HustleSIM API first
+    if (process.env.HUSTLESIM_API_KEY) {
+        try {
+            return await callHustleSimAPI('data', network, phoneNumber, amount, reference, dataSize);
+        } catch (error) {
+            console.log('HustleSIM failed:', error.message);
+        }
+    }
+    
+    // Try Paystack Bills API
+    if (process.env.PAYSTACK_SECRET_KEY) {
+        try {
+            return await callPaystackBills('data', network, phoneNumber, amount, reference, dataSize);
+        } catch (error) {
+            console.log('Paystack Bills failed:', error.message);
+        }
+    }
+    
+    // Try VTPass API
+    if (process.env.VTPASS_API_KEY) {
+        try {
+            return await callVTPassAPI('data', network, phoneNumber, amount, reference, dataSize);
+        } catch (error) {
+            console.log('VTPass failed:', error.message);
+        }
+    }
+    
+    // If all real providers fail, return error
+    throw new Error('All data providers are currently unavailable. Please try again later or contact support.');
 }
 
 // Validate recharge request
@@ -104,53 +210,7 @@ function validateRechargeRequest(body) {
     return null;
 }
 
-// Process airtime recharge
-async function processAirtimeRecharge(network, phoneNumber, amount, reference) {
-    console.log(`Processing airtime: ${network} - ${phoneNumber} - ₦${amount}`);
-    
-    // Try real providers first, then fallback to simulation
-    try {
-        // HustleSIM API (if configured)
-        if (process.env.HUSTLESIM_API_KEY) {
-            return await callHustleSimAPI('airtime', network, phoneNumber, amount, reference);
-        }
-        
-        // Paystack Bills API (if configured)
-        if (process.env.PAYSTACK_SECRET_KEY) {
-            return await callPaystackBills('airtime', network, phoneNumber, amount, reference);
-        }
-        
-    } catch (error) {
-        console.log('Provider failed, using simulation:', error.message);
-    }
-    
-    // Simulation mode
-    return simulateRecharge('airtime', network, phoneNumber, amount, reference);
-}
-
-// Process data recharge
-async function processDataRecharge(network, phoneNumber, dataSize, amount, reference) {
-    console.log(`Processing data: ${network} - ${phoneNumber} - ${dataSize} - ₦${amount}`);
-    
-    try {
-        // Try real providers
-        if (process.env.HUSTLESIM_API_KEY) {
-            return await callHustleSimAPI('data', network, phoneNumber, amount, reference, dataSize);
-        }
-        
-        if (process.env.PAYSTACK_SECRET_KEY) {
-            return await callPaystackBills('data', network, phoneNumber, amount, reference, dataSize);
-        }
-        
-    } catch (error) {
-        console.log('Provider failed, using simulation:', error.message);
-    }
-    
-    // Simulation mode
-    return simulateRecharge('data', network, phoneNumber, amount, reference, dataSize);
-}
-
-// HustleSIM API call
+// HustleSIM API call (Nigerian provider)
 async function callHustleSimAPI(type, network, phoneNumber, amount, reference, dataSize) {
     const response = await fetch('https://api.hustlesim.com/api/recharge', {
         method: 'POST',
@@ -169,7 +229,8 @@ async function callHustleSimAPI(type, network, phoneNumber, amount, reference, d
     });
 
     if (!response.ok) {
-        throw new Error(`HustleSIM API failed: ${response.statusText}`);
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`HustleSIM API failed: ${error.message || response.statusText}`);
     }
 
     const result = await response.json();
@@ -202,7 +263,8 @@ async function callPaystackBills(type, network, phoneNumber, amount, reference, 
     });
 
     if (!response.ok) {
-        throw new Error(`Paystack Bills API failed: ${response.statusText}`);
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`Paystack Bills API failed: ${error.message || response.statusText}`);
     }
 
     const result = await response.json();
@@ -214,21 +276,40 @@ async function callPaystackBills(type, network, phoneNumber, amount, reference, 
     };
 }
 
-// Simulation mode for testing
-function simulateRecharge(type, network, phoneNumber, amount, reference, dataSize) {
-    // Simulate processing delay
-    const delay = Math.random() * 1000 + 500; // 0.5-1.5 seconds
+// VTPass API call (Nigerian provider)
+async function callVTPassAPI(type, network, phoneNumber, amount, reference, dataSize) {
+    const serviceCode = getVTPassServiceCode(type, network);
     
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                transactionId: `SIM${Date.now()}`,
-                confirmationCode: generateConfirmationCode(),
-                status: 'completed',
-                provider: 'Simulation'
-            });
-        }, delay);
+    const response = await fetch('https://vtpass.com/api/pay', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.VTPASS_API_KEY}`,
+            'api-key': process.env.VTPASS_API_KEY,
+            'secret-key': process.env.VTPASS_SECRET_KEY
+        },
+        body: JSON.stringify({
+            serviceID: serviceCode,
+            billersCode: phoneNumber,
+            variation_code: dataSize || 'airtime',
+            amount: amount,
+            phone: phoneNumber,
+            request_id: reference
+        })
     });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`VTPass API failed: ${error.message || response.statusText}`);
+    }
+
+    const result = await response.json();
+    return {
+        transactionId: result.requestId,
+        confirmationCode: result.transactionId,
+        status: result.code === '000' ? 'completed' : 'failed',
+        provider: 'VTPass'
+    };
 }
 
 // Helper functions
@@ -261,7 +342,46 @@ function getBillerCode(type, network) {
 }
 
 function getDataItemCode(network, dataSize) {
-    // This would map data sizes to provider item codes
-    // For now, return a generic code
-    return `${network.toLowerCase()}-${dataSize}`;
+    // Map data sizes to provider item codes
+    const dataCodes = {
+        mtn: {
+            '1GB': 'mtn-1gb-30days',
+            '2GB': 'mtn-2gb-30days',
+            '5GB': 'mtn-5gb-30days',
+            '10GB': 'mtn-10gb-30days'
+        },
+        airtel: {
+            '1GB': 'airtel-1gb-30days',
+            '2GB': 'airtel-2gb-30days',
+            '5GB': 'airtel-5gb-30days',
+            '10GB': 'airtel-10gb-30days'
+        },
+        glo: {
+            '1GB': 'glo-1gb-30days',
+            '2GB': 'glo-2gb-30days',
+            '5GB': 'glo-5gb-30days',
+            '10GB': 'glo-10gb-30days'
+        }
+    };
+    
+    return dataCodes[network.toLowerCase()]?.[dataSize] || `${network.toLowerCase()}-${dataSize}`;
+}
+
+function getVTPassServiceCode(type, network) {
+    const serviceCodes = {
+        airtime: {
+            mtn: 'mtn',
+            airtel: 'airtel',
+            glo: 'glo',
+            '9mobile': '9mobile'
+        },
+        data: {
+            mtn: 'mtn-data',
+            airtel: 'airtel-data',
+            glo: 'glo-data',
+            '9mobile': '9mobile-data'
+        }
+    };
+    
+    return serviceCodes[type]?.[network.toLowerCase()] || 'unknown';
 }
