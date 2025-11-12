@@ -15,13 +15,25 @@ export default function handler(req, res) {
         version: '1.0.0',
         environment: process.env.NODE_ENV || 'production',
         services: {
+            clubkonnect: {
+                configured: !!process.env.CLUBKONNECT_API_KEY,
+                enabled: !!process.env.CLUBKONNECT_API_KEY,
+                priority: 1
+            },
             paystack: {
                 configured: !!process.env.PAYSTACK_SECRET_KEY,
-                test_mode: process.env.PAYSTACK_SECRET_KEY?.startsWith('sk_test') || false
+                test_mode: process.env.PAYSTACK_SECRET_KEY?.startsWith('sk_test') || false,
+                priority: 2
             },
             hustlesim: {
                 configured: !!process.env.HUSTLESIM_API_KEY,
-                enabled: !!process.env.HUSTLESIM_API_KEY
+                enabled: !!process.env.HUSTLESIM_API_KEY,
+                priority: 3
+            },
+            vtpass: {
+                configured: !!process.env.VTPASS_API_KEY,
+                enabled: !!process.env.VTPASS_API_KEY,
+                priority: 4
             },
             database: {
                 configured: false, // TODO: Add when database is connected

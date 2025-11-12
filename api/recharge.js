@@ -117,7 +117,16 @@ function verifyAuthentication(req) {
 async function processAirtimeRecharge(network, phoneNumber, amount, reference, user) {
     console.log(`Processing REAL airtime: ${network} - ${phoneNumber} - ₦${amount} for user ${user.userId}`);
     
-    // Try HustleSIM API first
+    // Try ClubKonnect API first (Your API key)
+    if (process.env.CLUBKONNECT_API_KEY) {
+        try {
+            return await callClubKonnectAPI('airtime', network, phoneNumber, amount, reference);
+        } catch (error) {
+            console.log('ClubKonnect failed:', error.message);
+        }
+    }
+    
+    // Try HustleSIM API second
     if (process.env.HUSTLESIM_API_KEY) {
         try {
             return await callHustleSimAPI('airtime', network, phoneNumber, amount, reference);
@@ -126,7 +135,7 @@ async function processAirtimeRecharge(network, phoneNumber, amount, reference, u
         }
     }
     
-    // Try Paystack Bills API
+    // Try Paystack Bills API third
     if (process.env.PAYSTACK_SECRET_KEY) {
         try {
             return await callPaystackBills('airtime', network, phoneNumber, amount, reference);
@@ -135,7 +144,7 @@ async function processAirtimeRecharge(network, phoneNumber, amount, reference, u
         }
     }
     
-    // Try VTPass API
+    // Try VTPass API last
     if (process.env.VTPASS_API_KEY) {
         try {
             return await callVTPassAPI('airtime', network, phoneNumber, amount, reference);
@@ -152,7 +161,16 @@ async function processAirtimeRecharge(network, phoneNumber, amount, reference, u
 async function processDataRecharge(network, phoneNumber, dataSize, amount, reference, user) {
     console.log(`Processing REAL data: ${network} - ${phoneNumber} - ${dataSize} - ₦${amount} for user ${user.userId}`);
     
-    // Try HustleSIM API first
+    // Try ClubKonnect API first (Your API key)
+    if (process.env.CLUBKONNECT_API_KEY) {
+        try {
+            return await callClubKonnectAPI('data', network, phoneNumber, amount, reference, dataSize);
+        } catch (error) {
+            console.log('ClubKonnect failed:', error.message);
+        }
+    }
+    
+    // Try HustleSIM API second
     if (process.env.HUSTLESIM_API_KEY) {
         try {
             return await callHustleSimAPI('data', network, phoneNumber, amount, reference, dataSize);
@@ -161,7 +179,7 @@ async function processDataRecharge(network, phoneNumber, dataSize, amount, refer
         }
     }
     
-    // Try Paystack Bills API
+    // Try Paystack Bills API third
     if (process.env.PAYSTACK_SECRET_KEY) {
         try {
             return await callPaystackBills('data', network, phoneNumber, amount, reference, dataSize);
@@ -170,7 +188,7 @@ async function processDataRecharge(network, phoneNumber, dataSize, amount, refer
         }
     }
     
-    // Try VTPass API
+    // Try VTPass API last
     if (process.env.VTPASS_API_KEY) {
         try {
             return await callVTPassAPI('data', network, phoneNumber, amount, reference, dataSize);
@@ -208,6 +226,120 @@ function validateRechargeRequest(body) {
     }
 
     return null;
+}
+
+// ClubKonnect API call (YOUR API KEY - Primary provider)
+async function callClubKonnectAPI(type, network, phoneNumber, amount, reference, dataSize) {
+    const baseURL = 'https://www.clubkonnect.com/api';
+    
+    // ClubKonnect network mapping
+    const networkCodes = {
+        'mtn': '01',
+        'airtel': '04', 
+        'glo': '02',
+        '9mobile': '03'
+    };
+
+    const networkCode = networkCodes[network.toLowerCase()];
+    if (!networkCode) {
+        throw new Error(`Network ${network} not supported by ClubKonnect`);
+    }
+
+    let endpoint, payload;
+
+    if (type === 'airtime') {
+        endpoint = '/airtime/';
+        payload = {
+            network: networkCode,
+            phone: phoneNumber,
+            amount: amount,
+            reference: reference
+        };
+    } else if (type === 'data') {
+        endpoint = '/data/';
+        
+        // Map data size to ClubKonnect plan codes
+        const dataPlanCode = getClubKonnectDataPlan(network, dataSize);
+        
+        payload = {
+            network: networkCode,
+            phone: phoneNumber,
+            plan: dataPlanCode,
+            reference: reference
+        };
+    } else {
+        throw new Error('Invalid transaction type');
+    }
+
+    const response = await fetch(`${baseURL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${process.env.CLUBKONNECT_API_KEY}`
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`ClubKonnect API failed: ${error.message || response.statusText}`);
+    }
+
+    const result = await response.json();
+    
+    // Check if transaction was successful
+    if (result.status === 'success' || result.status === 'successful') {
+        return {
+            transactionId: result.id || result.transaction_id || reference,
+            confirmationCode: result.confirmation_code || result.reference || generateConfirmationCode(),
+            status: 'completed',
+            provider: 'ClubKonnect'
+        };
+    } else {
+        throw new Error(`ClubKonnect transaction failed: ${result.message || 'Unknown error'}`);
+    }
+}
+
+// Get ClubKonnect data plan codes
+function getClubKonnectDataPlan(network, dataSize) {
+    // ClubKonnect data plan codes (these may need to be updated based on their current offerings)
+    const dataPlanCodes = {
+        mtn: {
+            '1GB': '11',    // MTN 1GB 30 days
+            '2GB': '12',    // MTN 2GB 30 days  
+            '5GB': '13',    // MTN 5GB 30 days
+            '10GB': '14',   // MTN 10GB 30 days
+            '500MB': '10'   // MTN 500MB 30 days
+        },
+        airtel: {
+            '1GB': '21',    // Airtel 1GB 30 days
+            '2GB': '22',    // Airtel 2GB 30 days
+            '5GB': '23',    // Airtel 5GB 30 days
+            '10GB': '24',   // Airtel 10GB 30 days
+            '500MB': '20'   // Airtel 500MB 30 days
+        },
+        glo: {
+            '1GB': '31',    // Glo 1GB 30 days
+            '2GB': '32',    // Glo 2GB 30 days
+            '5GB': '33',    // Glo 5GB 30 days
+            '10GB': '34',   // Glo 10GB 30 days
+            '500MB': '30'   // Glo 500MB 30 days
+        },
+        '9mobile': {
+            '1GB': '41',    // 9mobile 1GB 30 days
+            '2GB': '42',    // 9mobile 2GB 30 days
+            '5GB': '43',    // 9mobile 5GB 30 days
+            '10GB': '44',   // 9mobile 10GB 30 days
+            '500MB': '40'   // 9mobile 500MB 30 days
+        }
+    };
+    
+    const planCode = dataPlanCodes[network.toLowerCase()]?.[dataSize];
+    if (!planCode) {
+        throw new Error(`Data plan ${dataSize} not available for ${network} on ClubKonnect`);
+    }
+    
+    return planCode;
 }
 
 // HustleSIM API call (Nigerian provider)
