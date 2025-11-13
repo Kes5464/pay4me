@@ -5,7 +5,7 @@ let selectedDataPlan = null;
 // API base URL
 const API_BASE = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000/api' 
-    : 'https://kes5464.github.io/pay4me/api';
+    : 'https://payme-6hnbsnk6z-kestine1s-projects.vercel.app/api';
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -415,32 +415,6 @@ async function handleAirtimeRecharge(e) {
         showMessage('❌ Network error. Please check your connection and try again.', 'error');
     } finally {
         // Restore button
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }
-}
-        if (!email) {
-            showMessage('Email is required for payment', 'error');
-            return;
-        }
-
-        // Prepare payment data
-        const paymentData = {
-            email: email,
-            amount: parseFloat(amount),
-            phoneNumber: phoneNumber,
-            type: 'airtime',
-            network: selectedNetwork
-        };
-
-        // Initialize Paystack payment
-        await paystackService.initializePayment(paymentData);
-        
-    } catch (error) {
-        console.error('Airtime purchase error:', error);
-        showMessage(error.message || 'Failed to process payment. Please try again.', 'error');
-    } finally {
-        // Reset button
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
     }

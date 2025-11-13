@@ -35,7 +35,7 @@ const CONFIG = {
     app: {
         name: 'Pay4me',
         version: '1.0.0',
-        environment: 'test', // 'test' or 'production'
+        environment: 'production', // 'test' or 'production'
         
         // Minimum and maximum transaction amounts
         limits: {

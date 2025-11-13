@@ -4,7 +4,8 @@
   "description": "Pay4me - Airtime, Data and Sportybet Payment Platform",
   "main": "index.js",
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "node -e \"console.log('Use: vercel dev --listen 3000')\"",
+    "vercel:dev": "vercel dev",
     "build": "echo 'Build complete'",
     "start": "vercel --prod",
     "mobile-setup": "powershell -ExecutionPolicy Bypass -File setup-mobile-app.ps1",
@@ -16,7 +17,7 @@
     "cors": "^2.8.5"
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "keywords": [
     "paystack",
