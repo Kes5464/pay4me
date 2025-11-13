@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test - Pay4me</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .result { margin-top: 10px; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Authentication Test Page</h1>
+    
+    <div class="test-section">
+        <h3>1. API Health Check</h3>
+        <button onclick="testHealth()">Test API Health</button>
+        <div id="healthResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. Test Registration</h3>
+        <input type="text" id="testName" placeholder="Full Name" value="Test User">
+        <input type="email" id="testEmail" placeholder="Email" value="test@example.com">
+        <input type="tel" id="testPhone" placeholder="Phone" value="08012345678">
+        <input type="password" id="testPassword" placeholder="Password" value="test123">
+        <button onclick="testRegister()">Test Register</button>
+        <div id="registerResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. Test Login</h3>
+        <input type="email" id="loginTestEmail" placeholder="Email" value="test@example.com">
+        <input type="password" id="loginTestPassword" placeholder="Password" value="test123">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://payme-6hnbsnk6z-kestine1s-projects.vercel.app/api';
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                resultDiv.innerHTML = `<strong>Success:</strong> ${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testRegister() {
+            const resultDiv = document.getElementById('registerResult');
+            try {
+                const registerData = {
+                    name: document.getElementById('testName').value,
+                    email: document.getElementById('testEmail').value,
+                    phone: document.getElementById('testPhone').value,
+                    password: document.getElementById('testPassword').value
+                };
+
+                const response = await fetch(`${API_BASE}/auth?action=register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(registerData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<strong>Success:</strong> ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `<strong>API Error:</strong> ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Network Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            try {
+                const loginData = {
+                    identifier: document.getElementById('loginTestEmail').value,
+                    password: document.getElementById('loginTestPassword').value
+                };
+
+                const response = await fetch(`${API_BASE}/auth?action=login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<strong>Success:</strong> ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `<strong>API Error:</strong> ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Network Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html>
