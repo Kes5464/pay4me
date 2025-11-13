@@ -8,7 +8,7 @@ let authState = 'login'; // 'login', 'signup', 'forgot', 'verify'
 // API base URL
 const API_BASE = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000/api' 
-    : 'https://payme-qxwwx7g64-kestine1s-projects.vercel.app/api';
+    : 'https://api.pay4me.com.ng';
 
 // Initialize authentication on page load
 document.addEventListener('DOMContentLoaded', function() {
