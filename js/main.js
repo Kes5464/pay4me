@@ -10,8 +10,6 @@ const API_BASE = window.location.hostname === 'localhost'
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing app...');
-    console.log('paystackService available:', typeof paystackService !== 'undefined');
-    console.log('PaystackPop available:', typeof PaystackPop !== 'undefined');
     console.log('CONFIG available:', typeof CONFIG !== 'undefined');
     
     // Check authentication first
@@ -505,53 +503,10 @@ async function handleDataPurchase(e) {
     } catch (error) {
         console.error('Data purchase error:', error);
         showMessage('❌ Network error. Please check your connection and try again.', 'error');
-    } finally {
         // Reset button
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
     }
-}
-    
-    try {
-        // Use API service for data purchase
-        const result = await apiService.processDataPurchase(
-            phoneNumber, 
-            selectedDataPlan.size, 
-            selectedNetwork, 
-            selectedDataPlan.price.replace('₦', '').replace(',', '')
-        );
-        
-        if (result.success) {
-            // Save transaction to local storage
-            saveTransaction('data', {
-                phoneNumber,
-                dataSize: selectedDataPlan.size,
-                amount: selectedDataPlan.price,
-                network: selectedNetwork,
-                validity: selectedDataPlan.validity,
-                transactionId: result.transaction.transactionId,
-                confirmationCode: result.transaction.confirmationCode
-            });
-            
-            showMessage(`${result.message} | Confirmation: ${result.transaction.confirmationCode}`, 'success');
-            
-            // Reset form
-            e.target.reset();
-            document.querySelectorAll('.network-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelectorAll('.data-plan').forEach(plan => plan.classList.remove('selected'));
-            selectedNetwork = null;
-            selectedDataPlan = null;
-        } else {
-            showMessage(result.error, 'error');
-        }
-    } catch (error) {
-        showMessage('Service temporarily unavailable. Please try again later.', 'error');
-        console.error('Data purchase error:', error);
-    }
-    
-    // Reset button
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
 }
 
 // Save transaction to local storage

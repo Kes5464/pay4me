@@ -84,14 +84,14 @@ const CONFIG = {
 
     // FEATURE FLAGS
     features: {
-        enablePayments: true,
-        enableAPIIntegration: true, // Backend URL configured
+        enablePayments: false,           // Disable Paystack payments - using ClubKonnect directly
+        enableAPIIntegration: true,      // Backend URL configured
         enableSMS: false,
         enableEmail: false,
         enablePushNotifications: false,
-        enableExternalAPIs: false, // Disable external APIs to prevent CORS issues
-        enableRealTimeFeatures: false, // Disable real-time widgets temporarily
-        enableUtilityWidget: false // Disable utility widget temporarily
+        enableExternalAPIs: false,       // Disable external APIs to prevent CORS issues
+        enableRealTimeFeatures: false,   // Disable real-time widgets temporarily
+        enableUtilityWidget: false       // Disable utility widget temporarily
     }
 };
 
