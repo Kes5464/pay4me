@@ -5,7 +5,7 @@ let selectedDataPlan = null;
 // API base URL
 const API_BASE = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000/api' 
-    : 'https://payme-27jxb8ful-kestine1s-projects.vercel.app/api';
+    : 'https://api.pay4me.com.ng';
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
