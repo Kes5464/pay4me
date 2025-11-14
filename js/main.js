@@ -3,9 +3,7 @@ let selectedNetwork = null;
 let selectedDataPlan = null;
 
 // API base URL
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/api' 
-    : 'https://api.pay4me.com.ng';
+const API_BASE = 'http://localhost:3000/api';
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -376,7 +374,8 @@ async function handleAirtimeRecharge(e) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'x-vercel-protection-bypass': 'true'
             },
             body: JSON.stringify({
                 type: 'airtime',
@@ -466,7 +465,8 @@ async function handleDataPurchase(e) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'x-vercel-protection-bypass': 'true'
             },
             body: JSON.stringify({
                 type: 'data',

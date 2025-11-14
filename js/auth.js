@@ -6,11 +6,7 @@ let currentUser = null;
 let authState = 'login'; // 'login', 'signup', 'forgot', 'verify'
 
 // API base URL
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/api' 
-    : 'https://api.pay4me.com.ng';
-
-// Initialize authentication on page load
+const API_BASE = 'http://localhost:3000/api';
 document.addEventListener('DOMContentLoaded', function() {
     initializeAuth();
     checkExistingSession();
@@ -78,7 +74,8 @@ async function handleRealSignup(e) {
         const response = await fetch(`${API_BASE}/auth?action=register`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-vercel-protection-bypass': 'true'
             },
             body: JSON.stringify(signupData)
         });
@@ -115,7 +112,8 @@ async function handleVerification(userId, otp) {
         const response = await fetch(`${API_BASE}/auth?action=verify`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-vercel-protection-bypass': 'true'
             },
             body: JSON.stringify({ userId, otp })
         });
@@ -170,7 +168,8 @@ async function handleRealLogin(e) {
         const response = await fetch(`${API_BASE}/auth?action=login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-vercel-protection-bypass': 'true'
             },
             body: JSON.stringify(loginData)
         });
@@ -216,7 +215,8 @@ async function resendOTP() {
         const response = await fetch(`${API_BASE}/auth?action=resend-otp`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-vercel-protection-bypass': 'true'
             },
             body: JSON.stringify({ userId: pendingVerification.userId })
         });
