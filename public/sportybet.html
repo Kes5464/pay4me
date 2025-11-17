@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportybet - Pay4me</title>
+    <meta name="description" content="Place bets on your favorite sports with Sportybet. Enjoy live betting, competitive odds, and instant payouts!">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">� Pay4me</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="airtime.html">Airtime</a></li>
+                    <li><a href="data.html">Data</a></li>
+                    <li><a href="sportybet.html" class="active">Sportybet</a></li>
+                    <li><a href="login.html" id="authLink">Login</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page Header -->
+        <section class="hero">
+            <div class="container">
+                <h1>⚽ Sportybet Gaming</h1>
+                <p>Place bets on your favorite sports and games. Live betting, great odds, and instant payouts!</p>
+            </div>
+        </section>
+
+        <!-- Sportybet Options -->
+        <section class="container">
+            <div class="services" style="margin-bottom: 3rem;">
+                <div class="service-card">
+                    <div class="service-icon">🏈</div>
+                    <h3>Football Betting</h3>
+                    <p>Bet on Premier League, La Liga, Serie A, and more. Live matches and pre-match betting available.</p>
+                    <button class="btn" onclick="openSportybetSite('football')">Bet on Football</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🏀</div>
+                    <h3>Basketball</h3>
+                    <p>NBA, EuroLeague, and local basketball leagues. Point spreads, totals, and player props.</p>
+                    <button class="btn" onclick="openSportybetSite('basketball')">Bet on Basketball</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎾</div>
+                    <h3>Tennis</h3>
+                    <p>Grand Slams, ATP, WTA tours. Match winners, set betting, and live in-play options.</p>
+                    <button class="btn" onclick="openSportybetSite('tennis')">Bet on Tennis</button>
+                </div>
+            </div>
+
+            <!-- Quick Bet Section -->
+            <div class="form-container">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Quick Bet Simulator</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                    <em>This is a demo betting interface. No real money involved.</em>
+                </p>
+
+                <form id="quickBetForm">
+                    <!-- Match Selection -->
+                    <div class="form-group">
+                        <label>Popular Matches</label>
+                        <div class="network-selection" style="grid-template-columns: 1fr;">
+                            <div class="network-option match-option" data-match="man-utd-vs-arsenal" style="flex-direction: row; justify-content: space-between; padding: 1rem;">
+                                <div>
+                                    <strong>Manchester United vs Arsenal</strong>
+                                    <small style="display: block; color: #666;">Premier League • Today 3:00 PM</small>
+                                </div>
+                                <div style="text-align: right;">
+                                    <small style="color: #667eea;">Odds: 2.1</small>
+                                </div>
+                            </div>
+                            <div class="network-option match-option" data-match="barcelona-vs-madrid" style="flex-direction: row; justify-content: space-between; padding: 1rem;">
+                                <div>
+                                    <strong>Barcelona vs Real Madrid</strong>
+                                    <small style="display: block; color: #666;">La Liga • Tomorrow 8:00 PM</small>
+                                </div>
+                                <div style="text-align: right;">
+                                    <small style="color: #667eea;">Odds: 1.8</small>
+                                </div>
+                            </div>
+                            <div class="network-option match-option" data-match="nigeria-vs-ghana" style="flex-direction: row; justify-content: space-between; padding: 1rem;">
+                                <div>
+                                    <strong>Nigeria vs Ghana</strong>
+                                    <small style="display: block; color: #666;">AFCON Qualifier • Friday 5:00 PM</small>
+                                </div>
+                                <div style="text-align: right;">
+                                    <small style="color: #667eea;">Odds: 1.5</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bet Type -->
+                    <div class="form-group">
+                        <label for="betType">Bet Type</label>
+                        <select id="betType" name="betType" required>
+                            <option value="">Select bet type</option>
+                            <option value="match-winner">Match Winner</option>
+                            <option value="over-under">Over/Under 2.5 Goals</option>
+                            <option value="both-teams">Both Teams to Score</option>
+                            <option value="correct-score">Correct Score</option>
+                        </select>
+                    </div>
+
+                    <!-- Stake Amount -->
+                    <div class="form-group">
+                        <label for="stakeAmount">Stake Amount (₦)</label>
+                        <input type="number" id="stakeAmount" name="stakeAmount" min="100" max="50000" placeholder="Enter stake amount" required>
+                        <small style="color: #666; font-size: 0.9rem;">Minimum: ₦100, Maximum: ₦50,000</small>
+                    </div>
+
+                    <!-- Quick Stakes -->
+                    <div class="form-group">
+                        <label>Quick Stakes</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem;">
+                            <button type="button" class="quick-stake" data-amount="100" style="padding: 0.8rem; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer;">₦100</button>
+                            <button type="button" class="quick-stake" data-amount="500" style="padding: 0.8rem; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer;">₦500</button>
+                            <button type="button" class="quick-stake" data-amount="1000" style="padding: 0.8rem; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer;">₦1000</button>
+                            <button type="button" class="quick-stake" data-amount="5000" style="padding: 0.8rem; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer;">₦5000</button>
+                        </div>
+                    </div>
+
+                    <!-- Potential Winnings -->
+                    <div id="potentialWinnings" style="background: #f0f4ff; padding: 1rem; border-radius: 8px; margin: 1rem 0; display: none;">
+                        <strong>Potential Winnings: <span id="winningsAmount">₦0</span></strong>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">
+                        Place Bet (Demo)
+                    </button>
+                </form>
+            </div>
+
+            <!-- Live Matches -->
+            <div class="form-container" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1.5rem; color: #333;">🔴 Live Matches</h3>
+                <div class="services">
+                    <div style="background: #f9f9f9; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>Chelsea vs Liverpool</strong>
+                            <span style="background: red; color: white; padding: 0.2rem 0.5rem; border-radius: 15px; font-size: 0.8rem;">LIVE 67'</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; color: #667eea;">
+                            <span>2 - 1</span>
+                            <small style="color: #666;">Premier League</small>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9f9f9; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>AC Milan vs Juventus</strong>
+                            <span style="background: red; color: white; padding: 0.2rem 0.5rem; border-radius: 15px; font-size: 0.8rem;">LIVE 45'</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; color: #667eea;">
+                            <span>0 - 1</span>
+                            <small style="color: #666;">Serie A</small>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9f9f9; padding: 1rem; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>PSG vs Marseille</strong>
+                            <span style="background: green; color: white; padding: 0.2rem 0.5rem; border-radius: 15px; font-size: 0.8rem;">FT</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; color: #667eea;">
+                            <span>3 - 0</span>
+                            <small style="color: #666;">Ligue 1</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sportybet Integration -->
+            <div class="sportybet-container" style="margin-top: 3rem;">
+                <div style="text-align: center; padding: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Access Full Sportybet Platform</h3>
+                    <p style="color: #666; margin-bottom: 2rem;">
+                        For complete betting experience with real money, visit the official Sportybet website.
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn" onclick="openSportybetSite()" style="background: linear-gradient(45deg, #ff6b35, #ff8e35);">
+                            🌐 Visit Sportybet
+                        </button>
+                        <button class="btn" onclick="showSportybetApp()" style="background: linear-gradient(45deg, #00cc44, #00aa33);">
+                            📱 Download App
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Betting Tips -->
+            <div class="services" style="margin: 3rem 0;">
+                <div class="service-card">
+                    <div class="service-icon">💡</div>
+                    <h3>Betting Tips</h3>
+                    <ul style="text-align: left;">
+                        <li>Set a budget and stick to it</li>
+                        <li>Research teams and players</li>
+                        <li>Don't chase losses</li>
+                        <li>Bet only what you can afford to lose</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3>Popular Markets</h3>
+                    <ul style="text-align: left;">
+                        <li>Match Result (1X2)</li>
+                        <li>Over/Under Goals</li>
+                        <li>Both Teams to Score</li>
+                        <li>Correct Score</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🏆</div>
+                    <h3>Live Features</h3>
+                    <ul style="text-align: left;">
+                        <li>Live betting in-play</li>
+                        <li>Live streaming available</li>
+                        <li>Real-time odds updates</li>
+                        <li>Cash-out options</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear">2024</span> Pay4me. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                🔞 18+ Only • Gamble Responsibly • Terms & Conditions Apply
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        let selectedMatch = null;
+        let selectedOdds = 0;
+
+        // Match selection functionality
+        document.querySelectorAll('.match-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.match-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedMatch = this.dataset.match;
+                
+                // Set odds based on match
+                const oddsMap = {
+                    'man-utd-vs-arsenal': 2.1,
+                    'barcelona-vs-madrid': 1.8,
+                    'nigeria-vs-ghana': 1.5
+                };
+                selectedOdds = oddsMap[selectedMatch] || 1.0;
+                updatePotentialWinnings();
+            });
+        });
+
+        // Quick stake buttons
+        document.querySelectorAll('.quick-stake').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('stakeAmount').value = this.dataset.amount;
+                updatePotentialWinnings();
+                
+                // Visual feedback
+                document.querySelectorAll('.quick-stake').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Update potential winnings
+        function updatePotentialWinnings() {
+            const stake = parseFloat(document.getElementById('stakeAmount').value) || 0;
+            const winnings = stake * selectedOdds;
+            
+            if (stake > 0 && selectedOdds > 0) {
+                document.getElementById('potentialWinnings').style.display = 'block';
+                document.getElementById('winningsAmount').textContent = '₦' + winnings.toFixed(2);
+            } else {
+                document.getElementById('potentialWinnings').style.display = 'none';
+            }
+        }
+
+        // Stake amount input listener
+        document.getElementById('stakeAmount').addEventListener('input', updatePotentialWinnings);
+
+        // Quick bet form submission
+        document.getElementById('quickBetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!selectedMatch) {
+                showMessage('Please select a match', 'error');
+                return;
+            }
+            
+            const betType = document.getElementById('betType').value;
+            const stake = document.getElementById('stakeAmount').value;
+            
+            if (!betType || !stake) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Simulate bet placement
+            showMessage(`Demo bet placed! Match: ${selectedMatch.replace('-', ' vs ').toUpperCase()}, Stake: ₦${stake}`, 'success');
+            
+            // Reset form after 2 seconds
+            setTimeout(() => {
+                this.reset();
+                document.querySelectorAll('.match-option, .quick-stake').forEach(el => el.classList.remove('selected'));
+                selectedMatch = null;
+                selectedOdds = 0;
+                document.getElementById('potentialWinnings').style.display = 'none';
+            }, 2000);
+        });
+
+        // Open Sportybet site
+        function openSportybetSite(sport = '') {
+            // In a real application, this would open the actual Sportybet website
+            showMessage('This would redirect to Sportybet.com for real betting', 'success');
+        }
+
+        // Show Sportybet app info
+        function showSportybetApp() {
+            showMessage('Download Sportybet app from Google Play Store or Apple App Store', 'success');
+        }
+
+        // Quick stake hover effects
+        document.querySelectorAll('.quick-stake').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.borderColor = '#667eea';
+                this.style.backgroundColor = '#f0f4ff';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.borderColor = '#e0e0e0';
+                    this.style.backgroundColor = 'white';
+                }
+            });
+        });
+    </script>
+    <script src="js/api-service.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/realtime-features.js"></script>
+    <script src="js/utility-widget.js"></script>
+    <style>
+        .active {
+            color: #ffd700 !important;
+        }
+
+        .quick-stake.selected {
+            border-color: #667eea !important;
+            background: #667eea !important;
+            color: white !important;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            padding: 0.3rem 0;
+            color: #666;
+        }
+
+        ul li::before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .match-option:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</body>
+</html>

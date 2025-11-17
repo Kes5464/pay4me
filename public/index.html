@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- PWA Version 1.0 - Mobile App Ready -->
+    <title>Pay4me - Airtime, Data & Sportybet</title>
+    <meta name="description" content="Recharge airtime, buy data bundles for MTN, Airtel, Glo, and enjoy Sportybet gaming - all in one place!">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Pay4me">
+    <meta name="msapplication-TileColor" content="#667eea">
+    <meta name="msapplication-navbutton-color" content="#667eea">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="images/icon.svg">
+    <link rel="apple-touch-icon" href="images/icon-192x192.png">
+    <link rel="mask-icon" href="images/icon.svg" color="#667eea">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pwa.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">� Pay4me</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="airtime.html">Airtime</a></li>
+                    <li><a href="data.html">Data</a></li>
+                    <li><a href="sportybet.html">Sportybet</a></li>
+                    <li><a href="login.html" id="authLink">Login</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Welcome to Pay4me</h1>
+                <p>Your one-stop solution for airtime recharge, data purchases, and sports betting. Fast, secure, and convenient!</p>
+                <div style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 1rem auto; display: inline-block; font-weight: 500; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+                    🟢 Live Service • Powered by ClubKonnect API
+                </div>
+                <a href="#services" class="btn">Get Started</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="container">
+            <div class="services">
+                <!-- Airtime Recharge Card -->
+                <div class="service-card">
+                    <div class="service-icon">📞</div>
+                    <h3>Airtime Recharge</h3>
+                    <p>Instantly recharge your phone with airtime for MTN, Airtel, and Glo networks. Quick and hassle-free!</p>
+                    <div class="network-logos" style="margin: 1rem 0;">
+                        <span style="display: inline-block; width: 30px; height: 30px; background: #ffcc00; border-radius: 50%; margin: 0 5px; text-align: center; line-height: 30px; font-weight: bold; font-size: 12px;">MTN</span>
+                        <span style="display: inline-block; width: 30px; height: 30px; background: #ff0000; border-radius: 50%; margin: 0 5px; text-align: center; line-height: 30px; font-weight: bold; font-size: 10px; color: white;">AIR</span>
+                        <span style="display: inline-block; width: 30px; height: 30px; background: #00cc44; border-radius: 50%; margin: 0 5px; text-align: center; line-height: 30px; font-weight: bold; font-size: 12px; color: white;">GLO</span>
+                    </div>
+                    <a href="airtime.html" class="btn">Recharge Now</a>
+                </div>
+
+                <!-- Data Purchase Card -->
+                <div class="service-card">
+                    <div class="service-icon">📶</div>
+                    <h3>Data Bundles</h3>
+                    <p>Buy affordable data plans for all networks. Choose from various packages that suit your needs and budget.</p>
+                    <div style="margin: 1rem 0;">
+                        <small style="color: #667eea;">✓ Daily Plans ✓ Weekly Plans ✓ Monthly Plans</small>
+                    </div>
+                    <a href="data.html" class="btn">Buy Data</a>
+                </div>
+
+                <!-- Sportybet Card -->
+                <div class="service-card">
+                    <div class="service-icon">⚽</div>
+                    <h3>Sportybet</h3>
+                    <p>Place bets on your favorite sports and games. Enjoy live betting, competitive odds, and instant payouts.</p>
+                    <div style="margin: 1rem 0;">
+                        <small style="color: #667eea;">🏈 Football ⚽ Soccer 🏀 Basketball 🎾 Tennis</small>
+                    </div>
+                    <a href="sportybet.html" class="btn">Play Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="container" style="margin: 4rem auto;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: #333;">Why Choose Pay4me?</h2>
+                <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">Experience the best in digital services with our platform</p>
+            </div>
+
+            <div class="services">
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3>Instant Processing</h3>
+                    <p>All transactions are processed instantly. No waiting time, get your airtime and data immediately.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🔒</div>
+                    <h3>Secure Payments</h3>
+                    <p>Your transactions are protected with bank-level security. Pay safely using multiple payment methods.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Optimized for all devices. Use our platform seamlessly on your phone, tablet, or computer.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <h3>Best Prices</h3>
+                    <p>Competitive rates for all services. Get the best value for your money with our affordable pricing.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🕐</div>
+                    <h3>24/7 Available</h3>
+                    <p>Our platform is available round the clock. Recharge, buy data, or place bets anytime, anywhere.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">💬</div>
+                    <h3>Support</h3>
+                    <p>Dedicated customer support team ready to help you. Get assistance whenever you need it.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="container" style="margin: 3rem auto;">
+            <div class="form-container" style="text-align: center;">
+                <h3 style="margin-bottom: 2rem;">Quick Actions</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="airtime.html" class="btn" style="background: linear-gradient(45deg, #ffcc00, #ff9900);">💳 Recharge ₦100</a>
+                    <a href="data.html" class="btn" style="background: linear-gradient(45deg, #00cc44, #009933);">📊 Buy 1GB Data</a>
+                    <a href="sportybet.html" class="btn" style="background: linear-gradient(45deg, #ff0000, #cc0000);">🎲 Quick Bet</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear">2024</span> Pay4me. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                Fast ⚡ Secure 🔒 Reliable 📱 Available 24/7
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/api-service.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/oauth-service.js"></script>
+    <script src="js/pwa.js"></script>
+    <script>
+        // Only load external API components if enabled in config
+        document.addEventListener('DOMContentLoaded', function() {
+            if (CONFIG?.features?.enableRealTimeFeatures) {
+                const script1 = document.createElement('script');
+                script1.src = 'js/realtime-features.js';
+                document.head.appendChild(script1);
+            }
+            
+            if (CONFIG?.features?.enableUtilityWidget) {
+                const script2 = document.createElement('script');
+                script2.src = 'js/utility-widget.js';
+                document.head.appendChild(script2);
+            }
+        });
+    </script>
+
+    <!-- PWA Bottom Navigation -->
+    <nav class="pwa-bottom-nav">
+        <a href="index.html" class="active">
+            <span class="icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="airtime.html">
+            <span class="icon">📞</span>
+            <span>Airtime</span>
+        </a>
+        <a href="data.html">
+            <span class="icon">📶</span>
+            <span>Data</span>
+        </a>
+        <a href="sportybet.html">
+            <span class="icon">🎮</span>
+            <span>Sports</span>
+        </a>
+        <a href="status.html">
+            <span class="icon">ℹ️</span>
+            <span>Status</span>
+        </a>
+    </nav>
+    
+    <!-- Network Status Indicator -->
+    <div class="network-status" id="networkStatus">You're offline</div>
+
+    <!-- PWA Scripts -->
+    <script src="js/pwa.js"></script>
+</body>
+</html>
