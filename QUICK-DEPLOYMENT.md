@@ -1,12 +1,9 @@
 # 🚀 Quick Deployment Guide - Get Your UtilityHub Live in 30 Minutes!
 
 ## ✅ Step 1: Your Current Status
-- ✅ Paystack account created
-- ✅ API keys obtained:
-  - Public Key: `pk_test_fc5d880b0aac33002cd4d2550c247e6e165ec312`
-  - Secret Key: `sk_test_72e6e5d1334be8915b16c1f30a423c129d3b800d`
-- ✅ Frontend integrated with Paystack
-- ✅ Ready to accept payments!
+- ✅ Project configured
+- ✅ API integration ready
+- ✅ Ready for deployment!
 
 ## 🎯 Step 2: Quick Backend Setup (Choose One)
 
@@ -16,8 +13,7 @@
 2. **Create new project**: Import from GitHub
 3. **Add environment variables** in Vercel dashboard:
    ```
-   PAYSTACK_SECRET_KEY=sk_test_72e6e5d1334be8915b16c1f30a423c129d3b800d
-   PAYSTACK_PUBLIC_KEY=pk_test_fc5d880b0aac33002cd4d2550c247e6e165ec312
+   # Add your API keys here when needed
    ```
 4. **Upload backend file**: Copy `backend-examples/verify-payment.js` to `api/verify-payment.js`
 5. **Deploy**: Your API will be at `https://your-project.vercel.app/api/verify-payment`
@@ -64,41 +60,30 @@ features: {
    - Amount: `₦100`
    - Network: `MTN`
 3. **Click "Recharge Now"**
-4. **Paystack modal should open**
-5. **Use test card**: `4084084084084081`
-6. **Expiry**: Any future date
-7. **CVV**: `408`
-8. **PIN**: `0000`
+4. **Payment processing** (currently disabled for testing)
+5. **Transaction would be processed**
 
 ### Expected Result:
-- ✅ Payment modal opens
-- ✅ Test payment succeeds
-- ✅ Success message shows
-- ✅ Transaction receipt displays
+- ✅ Form validation works
+- ✅ API calls are made
+- ✅ Success/error messages display
 
 ## 💰 Step 5: Go Live (When Ready)
 
 ### Switch to Live Mode:
 1. **Get live API keys** from Paystack dashboard
-2. **Update configuration**:
-   ```javascript
-   publicKey: 'pk_live_your_live_key_here'
-   ```
-3. **Update backend environment**:
-   ```
-   PAYSTACK_SECRET_KEY=sk_live_your_live_secret_key
-   ```
+2. **Update configuration** (when enabling payments)
+3. **Set up payment provider account**
 4. **Set up VTPass account** (₦10,000 minimum)
 5. **Integrate actual airtime/data APIs**
 
 ## 🎉 Current Capabilities
 
 ### What Works Now:
-- ✅ **Real Paystack Payments**: Your users can pay with cards, bank transfer, USSD
-- ✅ **Test Mode**: Safe testing with test cards
-- ✅ **Payment Verification**: Backend verifies payments securely
-- ✅ **Transaction Receipts**: Users get confirmation
-- ✅ **Multiple Payment Methods**: Cards, bank, mobile money, etc.
+- ✅ **User Registration/Login**: Account creation and authentication
+- ✅ **Form Validation**: Input validation and error handling
+- ✅ **API Integration**: Backend communication ready
+- ✅ **Responsive Design**: Mobile-friendly interface
 
 ### What's Simulated:
 - ⚠️ **Actual Airtime Delivery**: Currently simulated (need VTPass integration)

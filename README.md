@@ -49,7 +49,7 @@ A responsive, feature-rich utility services platform for airtime recharge, data 
 - **Exchange Rates**: Real-time currency conversion (ExchangeRate-API)
 - **Phone Validation**: Number verification (AbstractAPI)
 - **QR Code Generation**: Dynamic QR code creation (QR Server API)
-- **Bank Information**: Nigerian bank codes lookup (Paystack Bank API)
+- **Bank Information**: Nigerian bank codes lookup
 - **Location Services**: IP-based geolocation (ipapi.co)
 - **Time Zones**: Global timezone data (WorldTimeAPI)
 

@@ -2,19 +2,6 @@
 // Add your actual API keys here
 
 const CONFIG = {
-    // PAYSTACK CONFIGURATION
-    paystack: {
-        // Replace with your actual Paystack public key
-        // Get this from: https://dashboard.paystack.com/settings/developer
-        publicKey: 'pk_test_fc5d880b0aac33002cd4d2550c247e6e165ec312',
-        
-        // Currency (NGN for Nigeria)
-        currency: 'NGN',
-        
-        // Payment channels to accept
-        channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer']
-    },
-
     // OAUTH AUTHENTICATION SETTINGS
     oauth: {
         google: {
@@ -76,7 +63,6 @@ const CONFIG = {
         endpoints: {
             health: '/health',
             verify: '/verify-payment',
-            webhook: '/webhook/paystack',
             airtime: '/recharge/airtime',
             data: '/recharge/data'
         }
@@ -84,7 +70,7 @@ const CONFIG = {
 
     // FEATURE FLAGS
     features: {
-        enablePayments: false,           // Disable Paystack payments - using ClubKonnect directly
+        enablePayments: false,           // Payments disabled
         enableAPIIntegration: true,      // Backend URL configured
         enableSMS: false,
         enableEmail: false,
@@ -98,16 +84,6 @@ const CONFIG = {
 // Validation function
 function validateConfig() {
     const errors = [];
-    
-    // Check Paystack key
-    if (CONFIG.paystack.publicKey === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') {
-        errors.push('Please update your Paystack public key in js/config.js');
-    }
-    
-    // Check if key format is correct
-    if (!CONFIG.paystack.publicKey.startsWith('pk_')) {
-        errors.push('Invalid Paystack public key format');
-    }
     
     return errors;
 }

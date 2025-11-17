@@ -5,13 +5,6 @@ class ProductionAPIService {
     constructor() {
         // Production API endpoints
         this.config = {
-            // Payment Gateway
-            paystack: {
-                publicKey: 'pk_live_your_paystack_public_key',
-                secretKey: 'sk_live_your_paystack_secret_key', // Keep on backend only
-                baseUrl: 'https://api.paystack.co'
-            },
-            
             // Bills Payment API
             flutterwave: {
                 publicKey: 'FLWPUBK_your_flutterwave_public_key',
@@ -29,40 +22,6 @@ class ProductionAPIService {
         
         // Your backend API URL
         this.backendUrl = 'https://your-backend-api.vercel.app/api';
-    }
-
-    // Initialize payment with Paystack
-    async initializePayment(amount, email, phone, type, network) {
-        try {
-            const response = await fetch(`${this.backendUrl}/payment/initialize`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                },
-                body: JSON.stringify({
-                    amount: amount * 100, // Convert to kobo
-                    email: email,
-                    phone: phone,
-                    type: type, // 'airtime' or 'data'
-                    network: network,
-                    callback_url: window.location.origin + '/payment-success'
-                })
-            });
-
-            const data = await response.json();
-            
-            if (data.status) {
-                // Redirect to Paystack payment page
-                window.location.href = data.data.authorization_url;
-                return data;
-            } else {
-                throw new Error(data.message || 'Payment initialization failed');
-            }
-        } catch (error) {
-            console.error('Payment initialization error:', error);
-            throw error;
-        }
     }
 
     // Process airtime recharge

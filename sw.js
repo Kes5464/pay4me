@@ -13,7 +13,6 @@ const urlsToCache = [
   '/js/main.js',
   '/js/auth.js',
   '/js/config.js',
-  '/js/paystack-service.js',
   '/js/api-service.js',
   '/manifest.json',
   // Add icon files when created
@@ -63,9 +62,7 @@ self.addEventListener('fetch', function(event) {
   }
 
   // Skip external API calls (let them fail gracefully)
-  if (event.request.url.includes('api.paystack.co') || 
-      event.request.url.includes('vercel.app') ||
-      event.request.url.includes('js.paystack.co')) {
+  if (event.request.url.includes('vercel.app')) {
     return;
   }
 
