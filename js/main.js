@@ -1,53 +1,287 @@
-// Global variables
+// Global variables for UI interactions only
 let selectedNetwork = null;
 let selectedDataPlan = null;
 
-// API base URL
-let API_BASE;
-
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing app...');
-    console.log('CONFIG available:', typeof CONFIG !== 'undefined');
-    
-    // Set API base URL from config
-    API_BASE = CONFIG?.api?.baseUrl || 'http://localhost:3000/api';
-    
-    // Check authentication first
-    checkAuthentication();
+    console.log('DOM loaded, initializing UI...');
     initializeApp();
 });
 
-// Check if user is authenticated
-function checkAuthentication() {
-    // Temporarily disable authentication checks for testing
-    // const token = localStorage.getItem('authToken');
-    // const protectedPages = ['airtime.html', 'data.html', 'sportybet.html'];
-    // const currentPage = window.location.pathname.split('/').pop();
-    
-    // if (protectedPages.includes(currentPage) && !token) {
-    //     showMessage('Please log in to use this feature', 'error');
-    //     setTimeout(() => {
-    //         window.location.href = 'login.html';
-    //     }, 2000);
-    //     return false;
-    // }
-    
-    return true;
-}
-
-// Get authentication token
-function getAuthToken() {
-    return localStorage.getItem('authToken');
-}
-
-// Get current user
-function getCurrentUser() {
-    const userData = localStorage.getItem('currentUser');
-    return userData ? JSON.parse(userData) : null;
-}
-
 // Initialize the application
+function initializeApp() {
+    console.log('Initializing app...');
+
+    // Initialize different pages based on current page
+    const currentPage = window.location.pathname.split('/').pop();
+
+    switch(currentPage) {
+        case 'index.html':
+        case '':
+            initializeHomePage();
+            break;
+        case 'airtime.html':
+            initializeAirtimePage();
+            break;
+        case 'data.html':
+            initializeDataPage();
+            break;
+        case 'sportybet.html':
+            initializeSportybetPage();
+            break;
+        case 'login.html':
+            initializeLoginPage();
+            break;
+    }
+
+    // Initialize common components
+    initializeCommonComponents();
+}
+
+// Initialize home page
+function initializeHomePage() {
+    console.log('Initializing home page...');
+    // Add any home page specific initialization here
+}
+
+// Initialize airtime page
+function initializeAirtimePage() {
+    console.log('Initializing airtime page...');
+
+    // Network selection
+    const networkOptions = document.querySelectorAll('.network-option');
+    networkOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove selected class from all options
+            networkOptions.forEach(opt => opt.classList.remove('selected'));
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            selectedNetwork = this.dataset.network;
+
+            // Show success message
+            showMessage(`Selected ${selectedNetwork} network`, 'success');
+        });
+    });
+
+    // Airtime form submission
+    const airtimeForm = document.getElementById('airtimeForm');
+    if (airtimeForm) {
+        airtimeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const phone = document.getElementById('phoneNumber').value;
+            const amount = document.getElementById('airtimeAmount').value;
+
+            if (!selectedNetwork) {
+                showMessage('Please select a network first', 'error');
+                return;
+            }
+
+            if (!phone || !amount) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Simulate successful airtime purchase
+            showMessage(`Airtime purchase simulated: ₦${amount} for ${phone} on ${selectedNetwork}`, 'success');
+
+            // Reset form
+            airtimeForm.reset();
+            selectedNetwork = null;
+            networkOptions.forEach(opt => opt.classList.remove('selected'));
+        });
+    }
+}
+
+// Initialize data page
+function initializeDataPage() {
+    console.log('Initializing data page...');
+
+    // Network selection
+    const networkOptions = document.querySelectorAll('.network-option');
+    networkOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            networkOptions.forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedNetwork = this.dataset.network;
+
+            // Load data plans for selected network
+            loadDataPlans(selectedNetwork);
+            showMessage(`Selected ${selectedNetwork} network`, 'success');
+        });
+    });
+
+    // Data form submission
+    const dataForm = document.getElementById('dataForm');
+    if (dataForm) {
+        dataForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const phone = document.getElementById('dataPhoneNumber').value;
+
+            if (!selectedNetwork) {
+                showMessage('Please select a network first', 'error');
+                return;
+            }
+
+            if (!selectedDataPlan) {
+                showMessage('Please select a data plan', 'error');
+                return;
+            }
+
+            if (!phone) {
+                showMessage('Please enter phone number', 'error');
+                return;
+            }
+
+            // Simulate successful data purchase
+            showMessage(`Data purchase simulated: ${selectedDataPlan.name} for ${phone} on ${selectedNetwork}`, 'success');
+
+            // Reset form
+            dataForm.reset();
+            selectedNetwork = null;
+            selectedDataPlan = null;
+            networkOptions.forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.data-plan').forEach(plan => plan.classList.remove('selected'));
+        });
+    }
+}
+
+// Load data plans for selected network (simulated)
+function loadDataPlans(network) {
+    const dataPlansContainer = document.querySelector('.data-plans');
+    if (!dataPlansContainer) return;
+
+    // Clear existing plans
+    dataPlansContainer.innerHTML = '';
+
+    // Simulated data plans
+    const plans = [
+        { name: '1GB - ₦500', value: '1gb-500', data: '1GB', price: '500' },
+        { name: '2GB - ₦1000', value: '2gb-1000', data: '2GB', price: '1000' },
+        { name: '5GB - ₦2000', value: '5gb-2000', data: '5GB', price: '2000' },
+        { name: '10GB - ₦3500', value: '10gb-3500', data: '10GB', price: '3500' }
+    ];
+
+    plans.forEach(plan => {
+        const planElement = document.createElement('div');
+        planElement.className = 'data-plan';
+        planElement.dataset.plan = plan.value;
+        planElement.innerHTML = `
+            <h4>${plan.name}</h4>
+            <p>Valid for 30 days</p>
+        `;
+
+        planElement.addEventListener('click', function() {
+            document.querySelectorAll('.data-plan').forEach(p => p.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedDataPlan = { name: plan.name, value: plan.value };
+            showMessage(`Selected ${plan.name}`, 'success');
+        });
+
+        dataPlansContainer.appendChild(planElement);
+    });
+}
+
+// Initialize sportybet page
+function initializeSportybetPage() {
+    console.log('Initializing sportybet page...');
+
+    // Sportybet form submission
+    const sportybetForm = document.getElementById('sportybetForm');
+    if (sportybetForm) {
+        sportybetForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const amount = document.getElementById('sportybetAmount').value;
+
+            if (!amount || amount < 100) {
+                showMessage('Minimum bet amount is ₦100', 'error');
+                return;
+            }
+
+            // Simulate successful bet placement
+            showMessage(`Bet placement simulated: ₦${amount}`, 'success');
+
+            // Reset form
+            sportybetForm.reset();
+        });
+    }
+}
+
+// Initialize login page
+function initializeLoginPage() {
+    console.log('Initializing login page...');
+    // Login functionality is handled by auth.js
+}
+
+// Initialize common components
+function initializeCommonComponents() {
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+    });
+}
+
+// Show message function
+function showMessage(message, type = 'info') {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('.message');
+    existingMessages.forEach(msg => msg.remove());
+
+    // Create new message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = message;
+
+    // Add to page
+    document.body.appendChild(messageDiv);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
+}
+
+// Utility functions
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN'
+    }).format(amount);
+}
+
+function validatePhoneNumber(phone) {
+    const nigeriaPhoneRegex = /^(\+234|234|0)[789]\d{9}$/;
+    return nigeriaPhoneRegex.test(phone);
+}
+
+function showLoading(button) {
+    const originalText = button.textContent;
+    button.textContent = 'Processing...';
+    button.disabled = true;
+
+    return function() {
+        button.textContent = originalText;
+        button.disabled = false;
+    };
+}
 function initializeApp() {
     console.log('Initializing Pay4me...');
     setupMobileMenu();
