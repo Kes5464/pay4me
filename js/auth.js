@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize authentication functionality
 function initializeAuth() {
     setupAuthForms();
+    setupPasswordToggles();
     setupFormValidation();
 }
 
@@ -238,6 +239,19 @@ async function resendOTP() {
     }
 }
 
+// Setup password visibility toggles
+function setupPasswordToggles() {
+    document.querySelectorAll('.password-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const inputId = this.getAttribute('data-input-id');
+            if (inputId) {
+                togglePassword(inputId);
+            }
+        });
+    });
+}
+
 // Toggle password visibility
 function togglePassword(inputId) {
     const passwordInput = document.getElementById(inputId);
@@ -251,9 +265,7 @@ function togglePassword(inputId) {
         passwordInput.type = 'password';
         toggleBtn.textContent = '👁️';
     }
-}
-
-// Setup form validation
+}// Setup form validation
 function setupFormValidation() {
     // Real-time email validation
     const emailInputs = document.querySelectorAll('input[type="email"]');
