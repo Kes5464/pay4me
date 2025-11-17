@@ -84,16 +84,18 @@ async function handleRealSignup(e) {
         const result = await response.json();
 
         if (result.success) {
-            // Store verification info
-            sessionStorage.setItem('pendingVerification', JSON.stringify({
-                userId: result.data.userId,
-                verificationType: result.data.verificationType,
-                verificationMethod: result.data.verificationMethod
-            }));
-
-            // Show verification form
-            showVerificationForm(result.data);
-            showMessage(result.message, 'success');
+            // Store authentication directly (no verification needed)
+            localStorage.setItem('authToken', 'dummy_token_' + result.data.userId);
+            localStorage.setItem('currentUser', JSON.stringify(result.data.user));
+            
+            currentUser = result.data.user;
+            
+            showMessage('Account created successfully! Welcome to Pay4me!', 'success');
+            
+            // Redirect to main app
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
         } else {
             showMessage(result.message, 'error');
         }

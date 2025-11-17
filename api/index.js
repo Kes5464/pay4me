@@ -77,44 +77,37 @@ async function handleRegister(req, res) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const otp = generateOTP();
         const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-        // Store pending verification with expiration
-        const pendingData = {
+        // Create user directly (skip OTP for testing)
+        const userData = {
+            id: userId,
             name,
             email,
             phone,
             password: hashedPassword,
-            otp,
-            otpExpires: Date.now() + 10 * 60 * 1000,
-            verificationType: verificationType || 'email',
-            createdAt: new Date().toISOString()
+            isVerified: true,
+            createdAt: new Date().toISOString(),
+            lastLogin: null
         };
 
-        await kv.set(`pending:${userId}`, JSON.stringify(pendingData), { ex: 600 });
+        await kv.set(`user:${userId}`, JSON.stringify(userData));
+        await kv.set(`user:email:${email}`, userId);
+        await kv.set(`user:phone:${phone}`, userId);
 
-        try {
-            await sendOTP(verificationType === 'phone' ? phone : email, otp, verificationType);
-            return res.status(200).json({
-                success: true,
-                message: `Verification code sent to your ${verificationType === 'phone' ? 'phone' : 'email'}`,
-                data: {
-                    userId,
-                    verificationType,
-                    verificationMethod: verificationType === 'phone' ?
-                        phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1****$3') :
-                        email.replace(/(.{2})(.*)(@.*)/, '$1****$3'),
-                    expiresIn: 600
+        return res.status(200).json({
+            success: true,
+            message: 'Account created successfully!',
+            data: {
+                userId,
+                user: {
+                    id: userId,
+                    name,
+                    email,
+                    phone
                 }
-            });
-        } catch (error) {
-            await kv.del(`pending:${userId}`);
-            return res.status(500).json({
-                success: false,
-                message: 'Failed to send verification code. Please try again.'
-            });
-        }
+            }
+        });
     } catch (error) {
         console.error('Registration error:', error);
         return res.status(500).json({
