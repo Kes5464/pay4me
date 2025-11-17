@@ -9,9 +9,11 @@ class UtilityFeaturesWidget {
     }
 
     async init() {
-        this.createUtilityWidget();
-        this.loadUtilityData();
-        this.startPeriodicUpdates();
+        if (CONFIG.features.enableUtilityWidget) {
+            this.createUtilityWidget();
+            this.loadUtilityData();
+            this.startPeriodicUpdates();
+        }
     }
 
     createUtilityWidget() {

@@ -6,8 +6,9 @@ let currentUser = null;
 let authState = 'login'; // 'login', 'signup', 'forgot', 'verify'
 
 // API base URL
-const API_BASE = CONFIG.api.baseUrl;
+let API_BASE;
 document.addEventListener('DOMContentLoaded', function() {
+    API_BASE = CONFIG.api.baseUrl;
     initializeAuth();
     checkExistingSession();
 });

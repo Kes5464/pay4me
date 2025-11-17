@@ -13,8 +13,10 @@ class RealTimeFeatures {
     }
 
     async init() {
-        await this.loadInitialData();
-        this.startRealTimeUpdates();
+        if (CONFIG.features.enableExternalAPIs) {
+            await this.loadInitialData();
+            this.startRealTimeUpdates();
+        }
         this.setupUIComponents();
     }
 
