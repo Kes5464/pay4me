@@ -61,10 +61,10 @@ const CONFIG = {
     api: {
         baseUrl: 'https://pay4me.com.ng',
         endpoints: {
-            health: '/health',
-            verify: '/verify-payment',
-            airtime: '/recharge/airtime',
-            data: '/recharge/data'
+            health: '/api/health',
+            verify: '/api/verify-payment',
+            airtime: '/api/recharge/airtime',
+            data: '/api/recharge/data'
         }
     },
 

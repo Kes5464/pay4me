@@ -1,6 +1,5 @@
 {
   "outputDirectory": ".",
-  "domains": ["pay4me.com.ng"],
   "headers": [
     {
       "source": "/api/(.*)",
