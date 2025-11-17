@@ -6,7 +6,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://pay4me.com.ng"
+          "value": "*"
         },
         {
           "key": "Access-Control-Allow-Methods",
