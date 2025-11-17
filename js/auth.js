@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize authentication functionality
 function initializeAuth() {
     setupAuthForms();
-    setupPasswordToggles();
     setupFormValidation();
 }
 
@@ -237,16 +236,6 @@ async function resendOTP() {
     } finally {
         hideLoadingState();
     }
-}
-
-// Setup password visibility toggles
-function setupPasswordToggles() {
-    document.querySelectorAll('.password-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            const inputId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
-            togglePassword(inputId);
-        });
-    });
 }
 
 // Toggle password visibility
