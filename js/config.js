@@ -59,7 +59,7 @@ const CONFIG = {
 
     // API ENDPOINTS (for production)
     api: {
-        baseUrl: 'https://pay4me-g243c0ufs-kestine1s-projects.vercel.app',
+        baseUrl: 'https://pay4me.com.ng',
         endpoints: {
             health: '/health',
             verify: '/verify-payment',
