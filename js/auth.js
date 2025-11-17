@@ -241,8 +241,9 @@ async function resendOTP() {
 // Toggle password visibility
 function togglePassword(inputId) {
     const passwordInput = document.getElementById(inputId);
-    const toggleBtn = passwordInput.nextElementSibling;
-    
+    const wrapper = passwordInput.parentElement;
+    const toggleBtn = wrapper.querySelector('.password-toggle');
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         toggleBtn.textContent = '🙈';
