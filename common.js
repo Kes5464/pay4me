@@ -3,7 +3,7 @@
 // API Base URL - Update this when deploying to production
 const API_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000/api' 
-    : 'https://pay4me-backend.onrender.com/api'; // Update with your backend URL after deploying to Render
+    : 'https://pay4me-com-ng.onrender.com/api'; // Updated with Render backend URL
 
 // Authentication State
 let currentUser = null;
