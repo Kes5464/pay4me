@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay4Me - Redirecting...</title>
+    <meta http-equiv="refresh" content="0; url=home.html">
+    <script>
+        window.location.href = "home.html";
+    </script>
+</head>
+<body>
+    <p>Redirecting to Pay4Me...</p>
+</body>
+</html>
+        <section id="airtime" class="service-section">
+            <div class="container">
+                <h2>📱 Airtime Recharge</h2>
+                <div class="service-card">
+                    <form id="airtimeForm" class="service-form">
+                        <div class="form-group">
+                            <label for="airtimeNetwork">Select Network</label>
+                            <select id="airtimeNetwork" required>
+                                <option value="">Choose Network</option>
+                                <option value="mtn">MTN</option>
+                                <option value="glo">Glo</option>
+                                <option value="airtel">Airtel</option>
+                                <option value="9mobile">9Mobile</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="airtimePhone">Phone Number</label>
+                            <input type="tel" id="airtimePhone" placeholder="08012345678" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="airtimeAmount">Amount (₦)</label>
+                            <input type="number" id="airtimeAmount" min="50" max="50000" placeholder="100" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Recharge Now</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Section -->
+        <section id="data" class="service-section">
+            <div class="container">
+                <h2>📶 Data Bundles</h2>
+                <div class="service-card">
+                    <form id="dataForm" class="service-form">
+                        <div class="form-group">
+                            <label for="dataNetwork">Select Network</label>
+                            <select id="dataNetwork" required>
+                                <option value="">Choose Network</option>
+                                <option value="mtn">MTN</option>
+                                <option value="glo">Glo</option>
+                                <option value="airtel">Airtel</option>
+                                <option value="9mobile">9Mobile</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataPhone">Phone Number</label>
+                            <input type="tel" id="dataPhone" placeholder="08012345678" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataPlan">Data Plan</label>
+                            <select id="dataPlan" required>
+                                <option value="">Select a network first</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buy Data</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Betting Section -->
+        <section id="betting" class="service-section">
+            <div class="container">
+                <h2>🎰 Betting Account Funding</h2>
+                <div class="service-card">
+                    <form id="bettingForm" class="service-form">
+                        <div class="form-group">
+                            <label for="bettingPlatform">Select Platform</label>
+                            <select id="bettingPlatform" required>
+                                <option value="">Choose Platform</option>
+                                <option value="sportybet">SportyBet</option>
+                                <option value="1xbet">1xBet</option>
+                                <option value="bet9ja">Bet9ja</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bettingUserId">User ID / Username</label>
+                            <input type="text" id="bettingUserId" placeholder="Enter your account ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bettingAmount">Amount (₦)</label>
+                            <input type="number" id="bettingAmount" min="100" max="1000000" placeholder="1000" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Fund Account</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- TV Subscription Section -->
+        <section id="tv" class="service-section">
+            <div class="container">
+                <h2>📺 TV Subscription</h2>
+                <div class="service-card">
+                    <form id="tvForm" class="service-form">
+                        <div class="form-group">
+                            <label for="tvProvider">Select Provider</label>
+                            <select id="tvProvider" required>
+                                <option value="">Choose Provider</option>
+                                <option value="dstv">DSTV</option>
+                                <option value="gotv">GOtv</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tvSmartcard">Smartcard Number</label>
+                            <input type="text" id="tvSmartcard" placeholder="Enter smartcard number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tvPackage">Package</label>
+                            <select id="tvPackage" required>
+                                <option value="">Select a provider first</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Subscribe Now</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pay4Me. All rights reserved.</p>
+            <p>Fast, Secure & Reliable Utility Payments</p>
+        </div>
+    </footer>
+
+    <!-- Modal for success/error messages -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalMessage"></div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close-login">&times;</span>
+            <h2>Login to Pay4Me</h2>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="auth-switch">Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close-register">&times;</span>
+            <h2>Register for Pay4Me</h2>
+            <form id="registrationForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Phone Number</label>
+                    <input type="tel" id="registerPhone" placeholder="08012345678" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Enter password (min 6 characters)" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p class="auth-switch">Already have an account? <a href="#" id="switchToLogin">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
